@@ -20,6 +20,10 @@
 #
 ###########################################################################
 
+LIB_SIGLO_CFILES = siglo/curl_nintendo_allocator.c siglo/curl_nintendo_shim.c
+
+LIB_SIGLO_HFILES = siglo/curl_nintendo_allocator.h siglo/curl_nintendo_shim.h
+
 LIB_VTLS_CFILES = vtls/openssl.c vtls/gtls.c vtls/vtls.c vtls/nss.c     \
   vtls/polarssl.c vtls/polarssl_threadlock.c vtls/axtls.c               \
   vtls/cyassl.c vtls/schannel.c vtls/darwinssl.c vtls/gskit.c
@@ -69,5 +73,5 @@ LIB_HFILES = arpa_telnet.h netrc.h file.h timeval.h hostip.h progress.h \
 
 LIB_RCFILES = libcurl.rc
 
-CSOURCES = $(LIB_CFILES) $(LIB_VTLS_CFILES)
-HHEADERS = $(LIB_HFILES) $(LIB_VTLS_HFILES)
+CSOURCES = $(LIB_CFILES) $(LIB_SIGLO_CFILES) $(LIB_VTLS_CFILES)
+HHEADERS = $(LIB_HFILES) $(LIB_SIGLO_HFILES) $(LIB_VTLS_HFILES)

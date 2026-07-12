@@ -29,6 +29,8 @@
 
 #include <curl/mprintf.h>
 
+#include "siglo/curl_nintendo_shim.h"
+
 # undef printf
 # undef fprintf
 # undef snprintf
@@ -37,11 +39,11 @@
 # undef vsnprintf
 # undef aprintf
 # undef vaprintf
-# define printf curl_mprintf
-# define fprintf curl_mfprintf
+#define printf nnCurlShim_printf
+#define fprintf nnCurlShim_fprintf
 # define snprintf curl_msnprintf
-# define vprintf curl_mvprintf
-# define vfprintf curl_mvfprintf
+#define vprintf nnCurlShim_vprintf
+#define vfprintf nnCurlShim_vfprintf
 # define vsnprintf curl_mvsnprintf
 # define aprintf curl_maprintf
 # define vaprintf curl_mvaprintf
