@@ -117,16 +117,40 @@ extern curl_wcsdup_callback Curl_cwcsdup;
  * from memdebug.h are the ones that shall be used.
  */
 
+#include "siglo/curl_nintendo_allocator.h"
+#include "siglo/curl_nintendo_shim.h"
+
 #undef strdup
-#define strdup(ptr) Curl_cstrdup(ptr)
+#define strdup(ptr) Curl_SigloStrdup(ptr)
 #undef malloc
-#define malloc(size) Curl_cmalloc(size)
+#define malloc(size) Curl_SigloMalloc(size)
 #undef calloc
-#define calloc(nbelem,size) Curl_ccalloc(nbelem, size)
+#define calloc(nbelem,size) Curl_SigloCalloc(nbelem, size)
 #undef realloc
-#define realloc(ptr,size) Curl_crealloc(ptr, size)
+#define realloc(ptr,size) Curl_SigloRealloc(ptr, size)
 #undef free
-#define free(ptr) Curl_cfree(ptr)
+#define free(ptr) Curl_SigloFree(ptr)
+
+
+// TODO: Move to correct place
+#define time(timer) nnCurlShim_time(timer)
+#define timeval(timer) nnCurlShim_get_timeval(timer)
+//struct hostent* nnCurlShim_gethostbyname(const char* name, int value);
+
+#define fopen(file,mode) nnCurlShim_fopen(file,mode)
+#define fclose(stream) nnCurlShim_fclose(stream)
+#define fread(ptr,size,count,stream) nnCurlShim_fread(ptr,size,count,stream)
+#define fseek(stream,offset,origin) nnCurlShim_fseek(stream,offset,origin)
+#define fgets(str,count,stream) nnCurlShim_fgets(str,count,stream)
+
+#define fwrite(buffer,size,count,stream) nnCurlShim_fwrite(buffer,size,count,stream)
+#define fputs(str,stream) nnCurlShim_fputs(str,stream)
+#define fflush(stream) nnCurlShim_fflush(stream)
+#define fputc(ch,stream) nnCurlShim_fputc(ch,stream)
+
+#define fileno(stream) nnCurlShim_fileno(stream)
+#define fstat(fd,statbuf) nnCurlShim_fstat(fd,statbuf)
+#define stat(path,statbuf) nnCurlShim_stat(path,statbuf)
 
 #ifdef WIN32
 #  ifdef UNICODE

@@ -214,9 +214,9 @@ curl_easy_strerror(CURLcode error)
   case CURLE_SSL_CIPHER:
     return "Couldn't use specified SSL cipher";
 
-  case CURLE_SSL_CACERT:
-    return "Peer certificate cannot be authenticated with given CA "
-      "certificates";
+//  case CURLE_SSL_CACERT:
+//    return "Peer certificate cannot be authenticated with given CA "
+//      "certificates";
 
   case CURLE_SSL_CACERT_BADFILE:
     return "Problem with the SSL CA cert (path? access rights?)";

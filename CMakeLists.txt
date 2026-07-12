@@ -38,7 +38,7 @@
 # To check:
 # (From Daniel Stenberg) The cmake build selected to run gcc with -fPIC on my box while the plain configure script did not.
 # (From Daniel Stenberg) The gcc command line use neither -g nor any -O options. As a developer, I also treasure our configure scripts's --enable-debug option that sets a long range of "picky" compiler options.
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake;${CMAKE_MODULE_PATH}")
 include(Utilities)
 include(Macros)
@@ -286,7 +286,7 @@ endif(NOT NOT_NEED_LIBNSL)
 
 check_function_exists(gethostname HAVE_GETHOSTNAME)
 
-set(OPENSSL_DEFAULT ON)
+set(OPENSSL_DEFAULT OFF)
 if(WIN32)
   set(OPENSSL_DEFAULT OFF)
   check_library_exists_concat("ws2_32" getch        HAVE_LIBWS2_32)
