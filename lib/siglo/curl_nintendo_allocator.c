@@ -1,4 +1,4 @@
-#include "../lib/curl_setup.h"
+#include "curl_setup.h"
 
 #include "curl_nintendo_allocator.h"
 
