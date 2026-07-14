@@ -301,6 +301,21 @@ curl_easy_strerror(CURLcode error)
   case CURLE_SSL_INVALIDCERTSTATUS:
     return "SSL server certificate status verification FAILED";
 
+  case CURLE_SSL_CTXFUNCTION:
+    return "CURLOPT_SSL_CTX_FUNCTION is required to set for https";
+
+  case CURLE_SSL_INVALIDCONTEXT:
+    return "SSL context is invalid which needs to be created by CURLOPT_SSL_CTX_FUNCTION";
+
+  case CURLE_SSL_FATALERROR:
+    return "A fatal error occurred regarding the SSL context";
+
+  case CURLE_SSL_ALREADYEXIST:
+    return "SSL connection already exists on the given handle";
+
+  case CURLE_SSL_INVALIDREFERENCE:
+    return "SSL encountered invalid pointer reference";
+
     /* error codes not used by current libcurl */
   case CURLE_OBSOLETE20:
   case CURLE_OBSOLETE24:

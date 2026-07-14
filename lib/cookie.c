@@ -1276,15 +1276,16 @@ static int cookie_output(struct CookieInfo *c, const char *dumphere)
           out);
     co = c->cookies;
 
+    // TODO: This should use fprintf. Investigate why this calls curl equivalent instead of nnCurlShim_fprintf
     while(co) {
       format_ptr = get_netscape_format(co);
       if(format_ptr == NULL) {
-        fprintf(out, "#\n# Fatal libcurl error\n");
+        curl_mfprintf(out, "#\n# Fatal libcurl error\n");
         if(!use_stdout)
           fclose(out);
         return 1;
       }
-      fprintf(out, "%s\n", format_ptr);
+      curl_mfprintf(out, "%s\n", format_ptr);
       free(format_ptr);
       co=co->next;
     }

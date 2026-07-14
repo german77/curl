@@ -489,7 +489,7 @@
 /* now undef the stock libc functions just to avoid them being used */
 #  undef HAVE_GETADDRINFO
 #  undef HAVE_GETHOSTBYNAME
-#elif defined(USE_THREADS_POSIX) || defined(USE_THREADS_WIN32)
+#elif defined(USE_THREADS_POSIX) || defined(USE_THREADS_WIN32) || defined(USE_THREADS_SIGLO)
 #  define CURLRES_ASYNCH
 #  define CURLRES_THREADED
 #else
@@ -565,7 +565,7 @@ int netware_init(void);
 #if defined(USE_GNUTLS) || defined(USE_OPENSSL) || defined(USE_NSS) || \
     defined(USE_POLARSSL) || defined(USE_AXTLS) || \
     defined(USE_CYASSL) || defined(USE_SCHANNEL) || \
-    defined(USE_DARWINSSL) || defined(USE_GSKIT)
+    defined(USE_DARWINSSL) || defined(USE_GSKIT) || defined(USE_NNSSL)
 #define USE_SSL    /* SSL support has been enabled */
 #endif
 

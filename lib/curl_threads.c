@@ -132,5 +132,15 @@ int Curl_thread_join(curl_thread_t *hnd)
 
   return ret;
 }
+#elif defined(USE_THREADS_SIGLO)
+curl_thread_t Curl_thread_create(unsigned int(CURL_STDCALL* func)(void*), void* arg);
 
+void Curl_thread_destroy(curl_thread_t hnd) {}
+
+int Curl_thread_join(curl_thread_t* hnd) {
+  if(hnd == NULL || *hnd == NULL)
+    return -1;
+
+  return 0;
+}
 #endif /* USE_THREADS_* */

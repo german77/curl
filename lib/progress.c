@@ -22,6 +22,7 @@
 
 #include "curl_setup.h"
 
+#include "curl_memory.h"
 #include "urldata.h"
 #include "sendf.h"
 #include "progress.h"

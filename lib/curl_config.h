@@ -11,11 +11,11 @@
 #define OS "aarch64-nintendo-switch-nvnmaxxing"
 #define PACKAGE "curl"
 #define PACKAGE_NAME "curl"
-#define PACKAGE_VERSION "7.64.1"
-#define VERSION "7.64.1"
+#define PACKAGE_VERSION "7.42.0"
+#define VERSION "7.42.0"
 
 /* ---- SSL/TLS backend ---- */
-// #define USE_NNSSL 1
+#define USE_NNSSL 1
 
 /* ---- type sizes (aarch64 LP64) ---- */
 #define SIZEOF_INT 4
@@ -23,10 +23,8 @@
 #define SIZEOF_LONG 8
 #define SIZEOF_LONG_LONG 8
 #define SIZEOF_SIZE_T 8
-#define SIZEOF_TIME_T 8
+#define SIZEOF_TIME_T 4
 #define SIZEOF_OFF_T 8
-#define SIZEOF_CURL_OFF_T 8
-#define CURL_SIZEOF_LONG 8
 #define HAVE_LONGLONG 1
 
 /* ---- available headers ---- */
@@ -57,7 +55,7 @@
 #define HAVE_BOOL_T 1
 #define HAVE_SOCKLEN_T 1
 #define HAVE_STRUCT_TIMEVAL 1
-#define HAVE_STRUCT_SOCKADDR_STORAGE 1
+//#define HAVE_STRUCT_SOCKADDR_STORAGE 1
 #define HAVE_SA_FAMILY_T 1
 #define HAVE_IN_ADDR_T 1
 
@@ -73,17 +71,18 @@
 #define HAVE_FCNTL 1
 #define HAVE_FCNTL_O_NONBLOCK 1
 #define HAVE_GETTIMEOFDAY 1
-#define HAVE_GMTIME_R 1
-#define HAVE_STRDUP 1
-#define HAVE_STRTOK_R 1
-#define HAVE_STRCASECMP 1
-#define HAVE_STRNCASECMP 1
-#define HAVE_INET_NTOP 1
-#define HAVE_INET_PTON 1
+// #define HAVE_GMTIME_R 1
+// #define HAVE_STRDUP 1
+// #define HAVE_STRTOK_R 1
+// #define HAVE_STRCASECMP 1
+// #define HAVE_STRNCASECMP 1
+// #define HAVE_INET_NTOP 1
+// #define HAVE_INET_PTON 1
 #define HAVE_VARIADIC_MACROS_C99 1
 #define HAVE_VARIADIC_MACROS_GCC 1
 
 /* ---- recv()/send() prototypes (match lib/nnsocket.c) ---- */
+// TODO: THESE DOESNT SEEM TO MATCH
 #define RECV_TYPE_ARG1 int
 #define RECV_TYPE_ARG2 void*
 #define RECV_TYPE_ARG3 size_t
@@ -111,6 +110,9 @@
 #define CURL_DISABLE_SMTP 1
 #define CURL_DISABLE_TELNET 1
 #define CURL_DISABLE_TFTP 1
+
+/* ---- threads ---- */
+#define USE_THREADS_SIGLO
 
 /* ---- misc ---- */
 #define CURL_EXTERN_SYMBOL

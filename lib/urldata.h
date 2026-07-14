@@ -127,6 +127,10 @@
 #undef realloc
 #endif /* USE_AXTLS */
 
+#ifdef USE_NNSSL
+#include "nn/ssl.h"
+#endif
+
 #ifdef USE_SCHANNEL
 #include "curl_sspi.h"
 #include <schnlsp.h>
@@ -330,6 +334,9 @@ struct ssl_connect_data {
   bool ssl_direction; /* true if writing, false if reading */
   size_t ssl_write_buffered_length;
 #endif /* USE_DARWINSSL */
+#ifdef USE_NNSSL
+  struct nnsslBackend backend;
+#endif /* USE_NNSSL */
 };
 
 struct ssl_config_data {
@@ -339,6 +346,8 @@ struct ssl_config_data {
   bool verifypeer;       /* set TRUE if this is desired */
   bool verifyhost;       /* set TRUE if CN/SAN must match hostname */
   bool verifystatus;     /* set TRUE if certificate status must be checked */
+  bool verifynnOption;    /* TODO: NINTENDO STUFF check name */
+  long filler [5];      /* TODO: NINTENDO STUFF find exact location */
   char *CApath;          /* certificate dir (doesn't work on windows) */
   char *CAfile;          /* certificate to verify peer against */
   const char *CRLfile;   /* CRL to check certificate revocation */
@@ -1428,6 +1437,8 @@ struct UserDefined {
   long use_port;     /* which port to use (when not using default) */
   unsigned long httpauth;  /* kind of HTTP authentication to use (bitmask) */
   unsigned long proxyauth; /* kind of proxy authentication to use (bitmask) */
+  char nnOptionA;    /* TODO: NINTENDO STUFF validate name*/
+  char nnOptionB;    /* TODO: NINTENDO STUFF validate name*/
   long followlocation; /* as in HTTP Location: */
   long maxredirs;    /* maximum no. of http(s) redirects to follow, set to -1
                         for infinity */

@@ -3,30 +3,48 @@
 
 #include <stdint.h>
 
-typedef struct ThreadType
+#include "nn/thread.h"
+
+typedef struct SigloThread
 {
-    char filler[0x1c0];
-    void (*somethingA)(size_t);
-    long somethingB;
+    struct ThreadType nnThread;
+    int (*threadLoop)(void*);
+    void* somethingB;
     void* stack;
-} ThreadType;
+} SigloThread;
+
+enum GCThreadStatus
+{
+    GCThreadStatus_Uninitialized,
+    GCThreadStatus_Initialized,
+    GCThreadStatus_Running,
+    GCThreadStatus_Busy,
+    GCThreadStatus_Stopped,
+};
 
 typedef struct GCThread
 {
-    int status;
+    enum GCThreadStatus status;
     int references;
-    struct ThreadType thread;
-    void* event;
+    SigloThread* currentThread;
+    struct EventType statusUpdateEvent;
+    MutexType mutex;
+    struct curl_llist* activeThreads;
+    struct curl_llist* inactiveThreads;
+    struct EventType startEvent;
 } GCThread;
 
-ThreadType* Curl_SigloThreadContextConstructor(long stack_size, void (*somethingA)(size_t), long somethingB);
-void Curl_SigloThreadEntryThunk(ThreadType*);
-void Curl_SigloThreadContextDestructor(ThreadType* thread);
+int Curl_GetTotalThreadCount();
+SigloThread* Curl_SigloThreadContextConstructor(long stack_size, int (*somethingA)(void*),
+                                                void* somethingB);
+void Curl_SigloThreadEntryThunk(struct ThreadType*);
+void Curl_SigloThreadContextDestructor(SigloThread* thread);
 void Curl_SigloThreadGCZero();
-void Curl_SigloThreadGCInitialize();
-void Curl_SigloThreadGCRunLoop();
-void Curl_SigloThreadGCSetActive();
-void Curl_SigloThreadGCSetInactive(ThreadType* thread);
+GCThread* Curl_SigloThreadGCInitialize();
+int Curl_SigloThreadGCRunLoop(void* somethingB);
+int Curl_SigloThreadGCSetActive();
+int Curl_SigloThreadGCSetInactive(SigloThread* thread);
 void Curl_SigloThreadGCFinalize();
+void Curl_SigloMiddlewareInfo();
 
 #endif /* HEADER_CURL_NINTENDO_THREADS */
