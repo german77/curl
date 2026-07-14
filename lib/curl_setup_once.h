@@ -27,6 +27,8 @@
  * Inclusion of common header files.
  */
 
+#include <nn/socket.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -254,7 +256,7 @@ struct timeval {
  */
 
 #if defined(HAVE_CLOSESOCKET)
-#  define sclose(x)  closesocket((x))
+#  define sclose(x)  nnsocketClose((x))
 #elif defined(HAVE_CLOSESOCKET_CAMEL)
 #  define sclose(x)  CloseSocket((x))
 #elif defined(HAVE_CLOSE_S)
@@ -271,7 +273,7 @@ struct timeval {
 #if defined(USE_LWIPSOCK)
 #  define sfcntl  lwip_fcntl
 #else
-#  define sfcntl  fcntl
+#  define sfcntl  nnsocketFcntl
 #endif
 
 /*
@@ -426,28 +428,31 @@ typedef int sig_atomic_t;
  * (or equivalent) on this platform to hide platform details to code using it.
  */
 
-#ifdef USE_WINSOCK
+/*#ifdef USE_WINSOCK
 #define SOCKERRNO         ((int)WSAGetLastError())
 #define SET_SOCKERRNO(x)  (WSASetLastError((int)(x)))
 #else
 #define SOCKERRNO         (errno)
 #define SET_SOCKERRNO(x)  (errno = (x))
-#endif
+#endif*/
 
+#define SOCKERRNO         (nnsocketGetLastErrno()) // Check this one
+#define SET_SOCKERRNO(x)  (nnsocketSetLastErrno(x))
 
 /*
  * Macro ERRNO / SET_ERRNO() returns / sets the NOT *socket-related* errno
  * (or equivalent) on this platform to hide platform details to code using it.
  */
 
-#if defined(WIN32) && !defined(USE_LWIPSOCK)
+/*#if defined(WIN32) && !defined(USE_LWIPSOCK)
 #define ERRNO         ((int)GetLastError())
 #define SET_ERRNO(x)  (SetLastError((DWORD)(x)))
 #else
 #define ERRNO         (errno)
 #define SET_ERRNO(x)  (errno = (x))
-#endif
-
+#endif*/
+#define ERRNO         (*__errno_location())
+#define SET_ERRNO(x)  (__errno_location()) // TODO: THIS IS WRONG
 
 /*
  * Portable error number symbolic names defined to Winsock error codes.

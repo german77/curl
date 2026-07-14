@@ -524,6 +524,12 @@ typedef enum {
   CURLE_SSL_PINNEDPUBKEYNOTMATCH, /* 90 - specified pinned public key did not
                                      match */
   CURLE_SSL_INVALIDCERTSTATUS,   /* 91 - invalid certificate status */
+  CURLE_SSL_CTXFUNCTION,         /* 92 - CTX_FUNCTION is required for https */
+  CURLE_SSL_INVALIDCONTEXT,      /* 93 - context is invalid */
+  CURLE_SSL_FATALERROR,          /* 94 - fatal error in ssl context */
+  CURLE_SSL_ALREADYEXIST,        /* 95 - connection already exist */
+  CURLE_SSL_INVALIDREFERENCE,    /* 96 - invalid pointer reference */
+
   CURL_LAST /* never use! */
 } CURLcode;
 

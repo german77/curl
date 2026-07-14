@@ -80,7 +80,7 @@ void Curl_SigloThreadGCZero(){
     thread->status=0;
     memset(thread->event, 0, 0x58);
 }
-void Curl_SigloThreadGCInitialize();
+bool Curl_SigloThreadGCInitialize();
 void Curl_SigloThreadGCRunLoop();
 void Curl_SigloThreadGCSetActive();
 void Curl_SigloThreadGCSetInactive(ThreadType* thread);

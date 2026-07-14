@@ -1,3 +1,5 @@
+#pragma once
+
 #include <netinet/in.h>
 #include <netdb.h>
 #include <nn/types.h>
@@ -19,13 +21,13 @@ int nnsocketListen(int, int);
 int nnsocketSetSockOpt(int socket, int socketLevel, int option, const void*, u32 len);
 int nnsocketSockAtMark(int);
 int nnsocketShutdown(int, int);
-int nnsocketSocket(bool);
+int nnsocketSocket();
 int nnsocketWrite(int domain, int type, int protocol);
 int nnsocketRead(int, int, int);
 u32 nnsocketClose();  // returns nn::Result
 void nnsocketSelect(int, fd_set*, fd_set*, fd_set*, struct timeval*);
 void nnsocketPoll(struct pollfd*, ulong, int);
-void nnsocketFcntl(int, int, ...);
+int nnsocketFcntl(int, int, ...);
 void nnsocketInetPton(int, const char*, void*);
 const char* nnsocketInetNtop(int af, const void* src, char* dst, u32 size);
 s32 nnsocketInetAton(const char* addressStr, struct in_addr* addressOut);
@@ -34,10 +36,10 @@ u16 nnsocketInetHtons(u16 val);
 u32 nnsocketInetHtonl(u32);
 u16 nnsocketInetNtohs(u16);
 u32 nnsocketInetNtohl(u32);
-s32 nnsocketGetLastErrno();
+int nnsocketGetLastErrno();
 void nnsocketSetLastErrno(int);
 s32 nnsocketRecvMsg(int, struct msghdr*, int);
-s32 nnsocketSendMsg(int, const struct msghdr*, int);
+s64 nnsocketSendMsg(int, const struct msghdr*, int);
 s32 nnsocketIoctl(int, u32, void*, ulong);
 s32 nnsocketOpen(const char*, int);
 u32 nnsocketInitialize(void* pool, ulong poolSize, ulong allocPoolSize, int concurLimit);

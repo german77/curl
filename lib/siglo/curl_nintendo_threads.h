@@ -23,10 +23,11 @@ ThreadType* Curl_SigloThreadContextConstructor(long stack_size, void (*something
 void Curl_SigloThreadEntryThunk(ThreadType*);
 void Curl_SigloThreadContextDestructor(ThreadType* thread);
 void Curl_SigloThreadGCZero();
-void Curl_SigloThreadGCInitialize();
+bool Curl_SigloThreadGCInitialize();
 void Curl_SigloThreadGCRunLoop();
 void Curl_SigloThreadGCSetActive();
 void Curl_SigloThreadGCSetInactive(ThreadType* thread);
 void Curl_SigloThreadGCFinalize();
+void Curl_SigloMiddlewareInfo();
 
 #endif /* HEADER_CURL_NINTENDO_THREADS */

@@ -912,6 +912,8 @@ struct connectdata {
   Curl_recv *recv[2];
   Curl_send *send[2];
 
+  void* filler [73]; /* TODO: NINTENDO STUFF find exact location */
+
   struct ssl_connect_data ssl[2]; /* this is for ssl-stuff */
   struct ssl_config_data ssl_config;
 
@@ -1012,6 +1014,7 @@ struct connectdata {
 #endif
 
   char syserr_buf [256]; /* buffer for Curl_strerror() */
+  void* fillerC [5]; /* TODO: NINTENDO STUFF find exact location */
 
 #ifdef CURLRES_ASYNCH
   /* data used for the asynch name resolve callback */
@@ -1436,6 +1439,8 @@ struct UserDefined {
                         bit represents a request, from 301 to 303 */
   bool free_referer; /* set TRUE if 'referer' points to a string we
                         allocated */
+
+  void* fillerD;      /* TODO: NINTENDO STUFF find exact location */
   void *postfields;  /* if POST, set the fields' values here */
   curl_seek_callback seek_func;      /* function that seeks the input */
   curl_off_t postfieldsize; /* if POST, this might have a size to use instead
@@ -1510,6 +1515,7 @@ struct UserDefined {
   long httpversion; /* when non-zero, a specific HTTP version requested to
                        be used in the library's request(s) */
   struct ssl_config_data ssl;  /* user defined SSL stuff */
+  void* filler [5];      /* TODO: NINTENDO STUFF find exact location */
   curl_proxytype proxytype; /* what kind of proxy that is in use */
   long dns_cache_timeout; /* DNS cache timeout */
   long buffer_size;      /* size of receive buffer to use */
