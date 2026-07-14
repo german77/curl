@@ -54,8 +54,7 @@ int curlx_nonblock(curl_socket_t sockfd,    /* operate on this */
 #elif defined(HAVE_FCNTL_O_NONBLOCK)
 
   /* most recent unix versions */
-  int flags;
-  flags = sfcntl(sockfd, F_GETFL, 0);
+  int flags=2;
   if(nonblock)
     return sfcntl(sockfd, F_SETFL, flags | O_NONBLOCK);
   else

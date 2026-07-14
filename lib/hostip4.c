@@ -93,19 +93,7 @@ Curl_addrinfo *Curl_getaddrinfo(struct connectdata *conn,
                                 int port,
                                 int *waitp)
 {
-  Curl_addrinfo *ai = NULL;
-
-#ifdef CURL_DISABLE_VERBOSE_STRINGS
-  (void)conn;
-#endif
-
-  *waitp = 0; /* synchronous response only */
-
-  ai = Curl_ipv4_resolve_r(hostname, port);
-  if(!ai)
-    infof(conn->data, "Curl_ipv4_resolve_r failed for %s\n", hostname);
-
-  return ai;
+  return Curl_resolver_getaddrinfo(conn, hostname, port, waitp);
 }
 #endif /* CURLRES_SYNCH */
 #endif /* CURLRES_IPV4 */
@@ -120,7 +108,7 @@ Curl_addrinfo *Curl_getaddrinfo(struct connectdata *conn,
  *
  */
 Curl_addrinfo *Curl_ipv4_resolve_r(const char *hostname,
-                                   int port)
+                                   int port, int sock_error)
 {
 #if !defined(HAVE_GETADDRINFO_THREADSAFE) && defined(HAVE_GETHOSTBYNAME_R_3)
   int res;
@@ -291,7 +279,7 @@ Curl_addrinfo *Curl_ipv4_resolve_r(const char *hostname,
      * gethostbyname() is the preferred one.
      */
   else {
-    h = gethostbyname((void*)hostname);
+    h = nnCurlShim_gethostbyname((void*)hostname, sock_error);
 #endif /* HAVE_GETADDRINFO_THREADSAFE || HAVE_GETHOSTBYNAME_R */
   }
 

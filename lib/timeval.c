@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "timeval.h"
+#include "curl_memory.h"
 
 #if defined(WIN32) && !defined(MSDOS)
 
@@ -89,9 +90,7 @@ struct timeval curlx_tvnow(void)
   ** clock drifting and external source time synchronization it can jump
   ** forward or backward in time.
   */
-  struct timeval now;
-  (void)gettimeofday(&now, NULL);
-  return now;
+  return timeval(0);
 }
 
 #else

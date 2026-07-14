@@ -143,7 +143,7 @@ int curl_dogetnameinfo(GETNAMEINFO_QUAL_ARG1 GETNAMEINFO_TYPE_ARG1 sa,
 #endif
 
 /* IPv4 threadsafe resolve function used for synch and asynch builds */
-Curl_addrinfo *Curl_ipv4_resolve_r(const char * hostname, int port);
+Curl_addrinfo *Curl_ipv4_resolve_r(const char * hostname, int port, int sock_error);
 
 CURLcode Curl_async_resolved(struct connectdata *conn,
                              bool *protocol_connect);

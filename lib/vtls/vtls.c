@@ -80,6 +80,16 @@
                                  (data->share->specifier &             \
                                   (1<<CURL_LOCK_DATA_SSL_SESSION)))
 
+// TODO: curl_memory.h is not the correct place for file overrides. Find another header
+#undef fopen
+#define fopen(file,mode) fopen(file,mode)
+#undef fclose
+#define fclose(stream) fclose(stream)
+#undef fread
+#define fread(ptr,size,count,stream) fread(ptr,size,count,stream)
+#undef fseek
+#define fseek(stream,offset,origin) fseek(stream,offset,origin)
+
 static bool safe_strequal(char* str1, char* str2)
 {
   if(str1 && str2)

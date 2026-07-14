@@ -537,6 +537,7 @@ CURLcode Curl_init_userdefined(struct UserDefined *set)
   set->proxytype = CURLPROXY_HTTP; /* defaults to HTTP proxy */
   set->httpauth = CURLAUTH_BASIC;  /* defaults to basic */
   set->proxyauth = CURLAUTH_BASIC; /* defaults to basic */
+  set->nnOptionA = 1;
 
   /* make libcurl quiet by default: */
   set->hide_progress = TRUE;  /* CURLOPT_NOPROGRESS changes these */
@@ -550,6 +551,8 @@ CURLcode Curl_init_userdefined(struct UserDefined *set)
 #ifdef USE_TLS_SRP
   set->ssl.authtype = CURL_TLSAUTH_NONE;
 #endif
+  set->nnOptionB = 0;
+  set->ssl.verifynnOption = FALSE;
   set->ssh_auth_types = CURLSSH_AUTH_DEFAULT; /* defaults to any auth
                                                       type */
   set->ssl.sessionid = TRUE; /* session ID caching enabled by default */
@@ -600,11 +603,12 @@ CURLcode Curl_init_userdefined(struct UserDefined *set)
   set->tcp_keepalive = FALSE;
   set->tcp_keepintvl = 60;
   set->tcp_keepidle = 60;
+  set->expect_100_timeout = 1000L; /* Wait for a second by default. */
 
   set->ssl_enable_npn = TRUE;
   set->ssl_enable_alpn = TRUE;
+  set->sep_headers=TRUE;
 
-  set->expect_100_timeout = 1000L; /* Wait for a second by default. */
   return result;
 }
 

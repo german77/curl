@@ -47,8 +47,16 @@
 #  define Curl_mutex_release(m)  LeaveCriticalSection(m)
 #  define Curl_mutex_destroy(m)  DeleteCriticalSection(m)
 #endif
+#  define CURL_STDCALL
+#  define curl_mutex_t           struct MutexType
+#  define curl_thread_t          pthread_t *
+#  define curl_thread_t_null     (pthread_t *)0
+#  define Curl_mutex_init(m)     nnosInitializeMutex(m, 0, 1)
+#  define Curl_mutex_acquire(m)  nnosLockMutex(m)
+#  define Curl_mutex_release(m)  nnosUnlockMutex(m)
+#  define Curl_mutex_destroy(m)  nnosFinalizeMutex(m)
 
-#if defined(USE_THREADS_POSIX) || defined(USE_THREADS_WIN32)
+#if defined(USE_THREADS_POSIX) || defined(USE_THREADS_WIN32) || defined(USE_THREADS_SIGLO)
 
 curl_thread_t Curl_thread_create(unsigned int (CURL_STDCALL *func) (void*),
                                  void *arg);
@@ -57,6 +65,6 @@ void Curl_thread_destroy(curl_thread_t hnd);
 
 int Curl_thread_join(curl_thread_t *hnd);
 
-#endif /* USE_THREADS_POSIX || USE_THREADS_WIN32 */
+#endif /* USE_THREADS_POSIX || USE_THREADS_WIN32 || USE_THREADS_SIGLO */
 
 #endif /* HEADER_CURL_THREADS_H */
