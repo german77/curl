@@ -17,7 +17,7 @@ typedef struct Allocator
     AllocatorVTable vptr;
 } Allocator;
 
-int Curl_SigloAllocatorInitializeDefaults(Allocator* self);
+int Curl_SigloAllocatorInitializeDefaults();
 int Curl_SigloAllocatorInitialize(void* (*malloc)(size_t), void (*free)(void*),
                                   void* (*realloc)(void*, size_t), char* (*strdup)(const char*),
                                   void* (*calloc)(size_t, size_t));

@@ -75,6 +75,8 @@
 #include "ssh.h"
 #include "curl_printf.h"
 
+#include "siglo/curl_nintendo_threads.h"
+
 /* The last #include files should be: */
 #include "curl_memory.h"
 #include "memdebug.h"
@@ -227,15 +229,7 @@ static CURLcode global_init(long flags, bool memoryfuncs)
     return CURLE_OK;
 
   if(memoryfuncs) {
-    /* Setup the default memory functions here (again) */
-    Curl_cmalloc = (curl_malloc_callback)malloc;
-    Curl_cfree = (curl_free_callback)free;
-    Curl_crealloc = (curl_realloc_callback)realloc;
-    Curl_cstrdup = (curl_strdup_callback)system_strdup;
-    Curl_ccalloc = (curl_calloc_callback)calloc;
-#if defined(WIN32) && defined(UNICODE)
-    Curl_cwcsdup = (curl_wcsdup_callback)_wcsdup;
-#endif
+    Curl_SigloAllocatorInitializeDefaults();
   }
 
   if(flags & CURL_GLOBAL_SSL)
@@ -289,6 +283,11 @@ static CURLcode global_init(long flags, bool memoryfuncs)
   return CURLE_OK;
 }
 
+CURLcode curl_global_init_internal()
+{
+  Curl_SigloMiddlewareInfo();
+  // TODO complete SSL and ThreadGC init
+}
 
 /**
  * curl_global_init() globally initializes cURL given a bitwise set of the
@@ -343,6 +342,7 @@ void curl_global_cleanup(void)
   if(--initialized)
     return;
 
+  Curl_SigloThreadGCFinalize();
   Curl_global_host_cache_dtor();
 
   if(init_flags & CURL_GLOBAL_SSL)

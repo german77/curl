@@ -28,5 +28,6 @@ void Curl_SigloThreadGCRunLoop();
 void Curl_SigloThreadGCSetActive();
 void Curl_SigloThreadGCSetInactive(ThreadType* thread);
 void Curl_SigloThreadGCFinalize();
+void Curl_SigloMiddlewareInfo();
 
 #endif /* HEADER_CURL_NINTENDO_THREADS */
