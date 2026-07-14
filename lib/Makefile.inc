@@ -20,9 +20,11 @@
 #
 ###########################################################################
 
-LIB_SIGLO_CFILES = siglo/curl_nintendo_allocator.c siglo/curl_nintendo_shim.c
+LIB_SIGLO_CFILES = siglo/curl_nintendo_allocator.c                      \
+  siglo/curl_nintendo_shim.c siglo/curl_nintendo_threads.c
 
-LIB_SIGLO_HFILES = siglo/curl_nintendo_allocator.h siglo/curl_nintendo_shim.h
+LIB_SIGLO_HFILES = siglo/curl_nintendo_allocator.h                      \
+  siglo/curl_nintendo_shim.h siglo/curl_nintendo_threads.h
 
 LIB_VTLS_CFILES = vtls/openssl.c vtls/gtls.c vtls/vtls.c vtls/nss.c     \
   vtls/polarssl.c vtls/polarssl_threadlock.c vtls/axtls.c               \
