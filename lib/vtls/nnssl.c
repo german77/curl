@@ -93,7 +93,7 @@ bool Curl_nnssl_false_start(void)
 bool Curl_nnssl_data_pending(const struct connectdata* conn, int connindex)
 {
     int connection = 0;
-    int result = nnsslConnectionPending(&conn->nnssl_connection[connindex], &connection);
+    int result = nnsslConnectionPending(&conn->ssl[connindex].nnssl_connection, &connection);
     return nnResultIsSuccess(result & 0xffffffff) && connection > 0;
 }
 

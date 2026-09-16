@@ -78,7 +78,7 @@ int Curl_nnssl_seed(struct SessionHandle* data);
 #define curlssl_false_start() Curl_nnssl_false_start()
 #define curlssl_session_free(x) Curl_nop_stmt
 #define curlssl_close_all(x) Curl_nop_stmt
-#define curlssl_shutdown(x,y) 1
+#define curlssl_shutdown(x,y) ((void)x, (void)y, 1)
 #define curlssl_set_engine(x,y) ((void)x, (void)y, CURLE_NOT_BUILT_IN)
 #define curlssl_set_engine_default(x) ((void)x, CURLE_NOT_BUILT_IN)
 #define curlssl_engines_list(x) ((void)x, (struct curl_slist *)NULL)

@@ -2,7 +2,7 @@
 
 struct Connection
 {
-    void* filler[35];
+    void* filler[34];
 };
 
 extern void nnosSleepThread();

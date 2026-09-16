@@ -334,6 +334,8 @@ struct ssl_connect_data {
   bool ssl_direction; /* true if writing, false if reading */
   size_t ssl_write_buffered_length;
 #endif /* USE_DARWINSSL */
+
+  struct Connection nnssl_connection;
 };
 
 struct ssl_config_data {
@@ -343,6 +345,7 @@ struct ssl_config_data {
   bool verifypeer;       /* set TRUE if this is desired */
   bool verifyhost;       /* set TRUE if CN/SAN must match hostname */
   bool verifystatus;     /* set TRUE if certificate status must be checked */
+  void* filler [5];      /* TODO: NINTENDO STUFF find exact location */
   char *CApath;          /* certificate dir (doesn't work on windows) */
   char *CAfile;          /* certificate to verify peer against */
   const char *CRLfile;   /* CRL to check certificate revocation */
@@ -371,7 +374,6 @@ struct curl_ssl_session {
   size_t idsize;    /* if known, otherwise 0 */
   long age;         /* just a number, the higher the more recent */
   int remote_port;  /* remote port to connect to */
-  void* filler[5];  /* TODO: NINTENDO STUFF find exact location */
   struct ssl_config_data ssl_config; /* setup for this session */
 };
 
@@ -917,10 +919,6 @@ struct connectdata {
   Curl_recv *recv[2];
   Curl_send *send[2];
 
-  void* fillerD; /* TODO: NINTENDO STUFF find exact location */
-  struct Connection nnssl_connection[2];
-  void* filler [2]; /* TODO: NINTENDO STUFF find exact location */
-
   struct ssl_connect_data ssl[2]; /* this is for ssl-stuff */
   struct ssl_config_data ssl_config;
 
@@ -1437,6 +1435,7 @@ struct UserDefined {
   long use_port;     /* which port to use (when not using default) */
   unsigned long httpauth;  /* kind of HTTP authentication to use (bitmask) */
   unsigned long proxyauth; /* kind of proxy authentication to use (bitmask) */
+  void* fillerD;      /* TODO: NINTENDO STUFF find exact location */
   long followlocation; /* as in HTTP Location: */
   long maxredirs;    /* maximum no. of http(s) redirects to follow, set to -1
                         for infinity */
@@ -1446,7 +1445,6 @@ struct UserDefined {
   bool free_referer; /* set TRUE if 'referer' points to a string we
                         allocated */
 
-  void* fillerD;      /* TODO: NINTENDO STUFF find exact location */
   void *postfields;  /* if POST, set the fields' values here */
   curl_seek_callback seek_func;      /* function that seeks the input */
   curl_off_t postfieldsize; /* if POST, this might have a size to use instead
@@ -1520,7 +1518,6 @@ struct UserDefined {
   Curl_HttpReq httpreq;   /* what kind of HTTP request (if any) is this */
   long httpversion; /* when non-zero, a specific HTTP version requested to
                        be used in the library's request(s) */
-  void* filler [5];      /* TODO: NINTENDO STUFF find exact location */
   struct ssl_config_data ssl;  /* user defined SSL stuff */
   curl_proxytype proxytype; /* what kind of proxy that is in use */
   long dns_cache_timeout; /* DNS cache timeout */
