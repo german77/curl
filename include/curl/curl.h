@@ -2061,7 +2061,8 @@ typedef enum {
   CURLSSLBACKEND_CYASSL = 7,
   CURLSSLBACKEND_SCHANNEL = 8,
   CURLSSLBACKEND_DARWINSSL = 9,
-  CURLSSLBACKEND_AXTLS = 10
+  CURLSSLBACKEND_AXTLS = 10,
+  CURLSSLBACKEND_NNSSL = 11
 } curl_sslbackend;
 
 /* Information about the SSL library used and the respective internal SSL

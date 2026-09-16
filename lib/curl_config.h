@@ -15,7 +15,7 @@
 #define VERSION "7.42.0"
 
 /* ---- SSL/TLS backend ---- */
-// #define USE_NNSSL 1
+#define USE_NNSSL 1
 
 /* ---- type sizes (aarch64 LP64) ---- */
 #define SIZEOF_INT 4
