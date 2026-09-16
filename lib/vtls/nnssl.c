@@ -34,30 +34,67 @@
 
 #ifdef USE_NNSSL
 
-#ifdef HAVE_LIMITS_H
-#include <limits.h>
-#endif
-
 #include "urldata.h"
-#include "sendf.h"
-#include "formdata.h" /* for the boundary function */
-#include "url.h" /* for the ssl config check function */
-#include "inet_pton.h"
-#include "openssl.h"
-#include "connect.h"
-#include "slist.h"
-#include "strequal.h"
-#include "select.h"
-#include "vtls.h"
-#include "rawstr.h"
-#include "hostcheck.h"
-#include "curl_printf.h"
-
-#include "warnless.h"
-#include "non-ascii.h" /* for Curl_convert_from_utf8 prototype */
 
 /* The last #include files should be: */
 #include "curl_memory.h"
-#include "memdebug.h"
+#include "nn/result.h"
+#include "nn/ssl.h"
+
+void Curl_nnssl_cleanup(void)
+{
+    nnsslFinalize();
+}
+
+CURLcode Curl_nnssl_connect(struct connectdata* conn, int sockindex)
+{
+    if (conn == NULL)
+        return CURLE_SSL_INVALIDREFERENCE;
+
+    return CURLE_NOT_BUILT_IN;
+}
+
+size_t Curl_nnssl_version(char* buffer, size_t size)
+{
+    if (!buffer)
+        return 0;
+
+    return snprintf(buffer, size, "nn::ssl");
+}
+
+int Curl_nnssl_seed(struct SessionHandle* data)
+{
+    return 0;
+}
+
+int Curl_nnssl_random(struct SessionHandle* data, unsigned char* entropy, size_t length)
+{
+    if (entropy == NULL || data == NULL)
+        return 0;
+
+    for (size_t i = 0; i < length; i++)
+    {
+        entropy[i] = 0;
+    }
+
+    return 0;
+}
+
+bool Curl_nnssl_cert_status_request(void)
+{
+    return false;
+}
+
+bool Curl_nnssl_false_start(void)
+{
+    return false;
+}
+
+bool Curl_nnssl_data_pending(const struct connectdata* conn, int connindex)
+{
+    int connection = 0;
+    int result = nnsslConnectionPending(&conn->nnssl_connection[connindex], &connection);
+    return nnResultIsSuccess(result & 0xffffffff) && connection > 0;
+}
 
 #endif /* USE_NNSSL */

@@ -31,49 +31,26 @@
 
 #include "urldata.h"
 
-CURLcode Curl_ossl_connect(struct connectdata *conn, int sockindex);
-CURLcode Curl_ossl_connect_nonblocking(struct connectdata *conn,
-                                       int sockindex,
-                                       bool *done);
+CURLcode Curl_nnssl_connect(struct connectdata* conn, int sockindex);
+CURLcode Curl_nnssl_connect_nonblocking(struct connectdata* conn, int sockindex, bool* done);
 
 /* close a SSL connection */
-void Curl_ossl_close(struct connectdata *conn, int sockindex);
+void Curl_nnssl_close(struct connectdata* conn, int sockindex);
 
-/* tell NNSSL to close down all open information regarding connections (and
-   thus session ID caching etc) */
-void Curl_ossl_close_all(struct SessionHandle *data);
+int Curl_nnssl_init(void);
+void Curl_nnssl_cleanup(void);
+bool Curl_nnssl_false_start(void);
 
-/* Sets an NNSSL engine */
-CURLcode Curl_ossl_set_engine(struct SessionHandle *data, const char *engine);
-
-/* function provided for the generic SSL-layer, called when a session id
-   should be freed */
-void Curl_ossl_session_free(void *ptr);
-
-/* Sets engine as default for all SSL operations */
-CURLcode Curl_ossl_set_engine_default(struct SessionHandle *data);
-
-/* Build list of NNSSL engines */
-struct curl_slist *Curl_ossl_engines_list(struct SessionHandle *data);
-
-int Curl_ossl_init(void);
-void Curl_ossl_cleanup(void);
-
-size_t Curl_ossl_version(char *buffer, size_t size);
-int Curl_ossl_check_cxn(struct connectdata *cxn);
-int Curl_ossl_shutdown(struct connectdata *conn, int sockindex);
-bool Curl_ossl_data_pending(const struct connectdata *conn,
-                            int connindex);
+size_t Curl_nnssl_version(char* buffer, size_t size);
+int Curl_nnssl_check_cxn(struct connectdata* cxn);
+bool Curl_nnssl_data_pending(const struct connectdata* conn, int connindex);
 
 /* return 0 if a find random is filled in */
-int Curl_ossl_random(struct SessionHandle *data, unsigned char *entropy,
-                     size_t length);
-void Curl_ossl_md5sum(unsigned char *tmp, /* input */
-                      size_t tmplen,
-                      unsigned char *md5sum /* output */,
-                      size_t unused);
+int Curl_nnssl_random(struct SessionHandle* data, unsigned char* entropy, size_t length);
 
-bool Curl_ossl_cert_status_request(void);
+bool Curl_nnssl_cert_status_request(void);
+
+int Curl_nnssl_seed(struct SessionHandle* data);
 
 /* Set the API backend definition to NNSSL */
 #define CURL_SSL_BACKEND CURLSSLBACKEND_NNSSL
@@ -88,25 +65,25 @@ bool Curl_ossl_cert_status_request(void);
 #define have_curlssl_ssl_ctx 1
 
 /* API setup for NNSSL */
-#define curlssl_init Curl_ossl_init
-#define curlssl_cleanup Curl_ossl_cleanup
-#define curlssl_connect Curl_ossl_connect
-#define curlssl_connect_nonblocking Curl_ossl_connect_nonblocking
-#define curlssl_session_free(x) Curl_ossl_session_free(x)
-#define curlssl_close_all Curl_ossl_close_all
-#define curlssl_close Curl_ossl_close
-#define curlssl_shutdown(x,y) Curl_ossl_shutdown(x,y)
-#define curlssl_set_engine(x,y) Curl_ossl_set_engine(x,y)
-#define curlssl_set_engine_default(x) Curl_ossl_set_engine_default(x)
-#define curlssl_engines_list(x) Curl_ossl_engines_list(x)
-#define curlssl_version Curl_ossl_version
-#define curlssl_check_cxn Curl_ossl_check_cxn
-#define curlssl_data_pending(x,y) Curl_ossl_data_pending(x,y)
-#define curlssl_random(x,y,z) Curl_ossl_random(x,y,z)
-#define curlssl_cert_status_request() Curl_ossl_cert_status_request()
+#define curlssl_init Curl_nnssl_init
+#define curlssl_cleanup Curl_nnssl_cleanup
+#define curlssl_connect Curl_nnssl_connect
+#define curlssl_connect_nonblocking Curl_nnssl_connect_nonblocking
+#define curlssl_close Curl_nnssl_close
+#define curlssl_version Curl_nnssl_version
+#define curlssl_check_cxn Curl_nnssl_check_cxn
+#define curlssl_data_pending(x, y) Curl_nnssl_data_pending(x, y)
+#define curlssl_random(x, y, z) Curl_nnssl_random(x, y, z)
+#define curlssl_cert_status_request() Curl_nnssl_cert_status_request()
+#define curlssl_false_start() Curl_nnssl_false_start()
+#define curlssl_session_free(x) Curl_nop_stmt
+#define curlssl_close_all(x) Curl_nop_stmt
+#define curlssl_shutdown(x,y) 1
+#define curlssl_set_engine(x,y) ((void)x, (void)y, CURLE_NOT_BUILT_IN)
+#define curlssl_set_engine_default(x) ((void)x, CURLE_NOT_BUILT_IN)
+#define curlssl_engines_list(x) ((void)x, (struct curl_slist *)NULL)
 
-#define DEFAULT_CIPHER_SELECTION \
-  "ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH"
+#define DEFAULT_CIPHER_SELECTION "ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH"
 
 #endif /* USE_NNSSL */
 #endif /* HEADER_CURL_NNSSL */

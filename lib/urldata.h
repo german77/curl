@@ -127,6 +127,10 @@
 #undef realloc
 #endif /* USE_AXTLS */
 
+#ifdef USE_NNSSL
+#include "nn/ssl.h"
+#endif
+
 #ifdef USE_SCHANNEL
 #include "curl_sspi.h"
 #include <schnlsp.h>
@@ -367,6 +371,7 @@ struct curl_ssl_session {
   size_t idsize;    /* if known, otherwise 0 */
   long age;         /* just a number, the higher the more recent */
   int remote_port;  /* remote port to connect to */
+  void* filler[5];  /* TODO: NINTENDO STUFF find exact location */
   struct ssl_config_data ssl_config; /* setup for this session */
 };
 
@@ -912,7 +917,9 @@ struct connectdata {
   Curl_recv *recv[2];
   Curl_send *send[2];
 
-  void* filler [73]; /* TODO: NINTENDO STUFF find exact location */
+  void* fillerD; /* TODO: NINTENDO STUFF find exact location */
+  struct Connection nnssl_connection[2];
+  void* filler [2]; /* TODO: NINTENDO STUFF find exact location */
 
   struct ssl_connect_data ssl[2]; /* this is for ssl-stuff */
   struct ssl_config_data ssl_config;
@@ -1513,8 +1520,8 @@ struct UserDefined {
   Curl_HttpReq httpreq;   /* what kind of HTTP request (if any) is this */
   long httpversion; /* when non-zero, a specific HTTP version requested to
                        be used in the library's request(s) */
-  struct ssl_config_data ssl;  /* user defined SSL stuff */
   void* filler [5];      /* TODO: NINTENDO STUFF find exact location */
+  struct ssl_config_data ssl;  /* user defined SSL stuff */
   curl_proxytype proxytype; /* what kind of proxy that is in use */
   long dns_cache_timeout; /* DNS cache timeout */
   long buffer_size;      /* size of receive buffer to use */

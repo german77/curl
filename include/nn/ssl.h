@@ -1,5 +1,10 @@
 #pragma once
 
+struct Connection
+{
+    void* filler[35];
+};
+
 extern void nnosSleepThread();
 extern void nnsslInitialize();
 extern void nnsslFinalize();
@@ -17,4 +22,4 @@ extern void nnsslConnectionGetVerifyCertError();
 extern void nnsslConnectionGetConnectionId();
 extern void nnsslConnectionDestroy();
 extern void nnsslConnectionPeek();
-extern void nnsslConnectionPending();
+extern size_t nnsslConnectionPending(const struct Connection*, int*);

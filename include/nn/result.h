@@ -1,3 +1,4 @@
 #pragma once
 
-extern bool nnResultIsFailure(int result);
+extern bool nnResultIsFailure(size_t result);
+extern bool nnResultIsSuccess(size_t result);
