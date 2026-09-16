@@ -1014,7 +1014,6 @@ struct connectdata {
 #endif
 
   char syserr_buf [256]; /* buffer for Curl_strerror() */
-  void* fillerC [5]; /* TODO: NINTENDO STUFF find exact location */
 
 #ifdef CURLRES_ASYNCH
   /* data used for the asynch name resolve callback */
