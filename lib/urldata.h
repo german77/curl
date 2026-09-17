@@ -334,8 +334,9 @@ struct ssl_connect_data {
   bool ssl_direction; /* true if writing, false if reading */
   size_t ssl_write_buffered_length;
 #endif /* USE_DARWINSSL */
-
-  struct Connection nnssl_connection;
+#ifdef USE_NNSSL
+  struct nnsslBackend backend;
+#endif /* USE_NNSSL */
 };
 
 struct ssl_config_data {
@@ -1435,7 +1436,7 @@ struct UserDefined {
   long use_port;     /* which port to use (when not using default) */
   unsigned long httpauth;  /* kind of HTTP authentication to use (bitmask) */
   unsigned long proxyauth; /* kind of proxy authentication to use (bitmask) */
-  void* fillerD;      /* TODO: NINTENDO STUFF find exact location */
+  unsigned long socks5auth; /* TODO: NINTENDO STUFF validate name*/
   long followlocation; /* as in HTTP Location: */
   long maxredirs;    /* maximum no. of http(s) redirects to follow, set to -1
                         for infinity */

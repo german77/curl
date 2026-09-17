@@ -42,8 +42,8 @@ void Curl_nnssl_cleanup(void);
 bool Curl_nnssl_false_start(void);
 
 size_t Curl_nnssl_version(char* buffer, size_t size);
-int Curl_nnssl_check_cxn(struct connectdata* cxn);
-bool Curl_nnssl_data_pending(const struct connectdata* conn, int connindex);
+int Curl_nnssl_check_cxn(struct connectdata* conn);
+bool Curl_nnssl_data_pending(const struct connectdata* conn, int sockindex);
 
 /* return 0 if a find random is filled in */
 int Curl_nnssl_random(struct SessionHandle* data, unsigned char* entropy, size_t length);

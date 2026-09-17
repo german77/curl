@@ -21,13 +21,8 @@
  ***************************************************************************/
 
 /*
- * Source file for all OpenSSL-specific code for the TLS/SSL layer. No code
+ * Source file for all NNSSL-specific code for the TLS/SSL layer. No code
  * but vtls.c should ever call or use these functions.
- */
-
-/*
- * The original SSLeay-using code for curl was written by Linas Vepstas and
- * Sampo Kellomaki 1998.
  */
 
 #include "curl_setup.h"
@@ -40,6 +35,43 @@
 #include "curl_memory.h"
 #include "nn/result.h"
 #include "nn/ssl.h"
+
+static void nnssl_destroy_ssl_connection(struct connectdata* conn, int sockindex)
+{
+    struct Connection* nnconn = &conn->ssl[sockindex].backend.connection;
+
+    uint64_t id = 0;
+    size_t result = nnsslConnectionGetConnectionId(nnconn, &id);
+    if (!nnResultIsFailure(result & 0xffffffff) && id != 0)
+    {
+        nnResultIsFailure(nnsslConnectionDestroy(nnconn) & 0xffffffff);
+        conn->ssl[sockindex].state = ssl_connection_none;
+    }
+}
+
+static void nnssl_destroy_ssl_context(struct connectdata* conn, int sockindex)
+{
+    struct nnsslBackend* backend = &conn->ssl[sockindex].backend;
+    struct Context* ctx = backend->pnnssl_context;
+
+    uint64_t id = 0;
+    if (ctx == NULL)
+        return;
+
+    bool result = nnResultIsFailure(nnsslContextGetContextId(ctx, &id) & 0xffffffff);
+    if (id != 0 && !result)
+        nnResultIsFailure(nnsslContextDestroy(backend->pnnssl_context) & 0xffffffff);
+}
+
+void Curl_nnssl_close(struct connectdata* conn, int sockindex)
+{
+    if (conn == NULL)
+        return;
+
+    nnssl_destroy_ssl_connection(conn, sockindex);
+    if (!conn->ssl[sockindex].backend.using_external_ssl_context)
+        nnssl_destroy_ssl_context(conn, sockindex);
+}
 
 void Curl_nnssl_cleanup(void)
 {
@@ -60,6 +92,34 @@ size_t Curl_nnssl_version(char* buffer, size_t size)
         return 0;
 
     return snprintf(buffer, size, "nn::ssl");
+}
+
+int Curl_nnssl_check_cxn(struct connectdata* conn)
+{
+    char buf[4];
+    int got = 0;
+
+    if (conn == NULL)
+        return CURLE_SSL_INVALIDREFERENCE;
+
+    size_t result =
+        nnsslConnectionPeek(&conn->ssl[0].backend.connection, buf, &got, 1) & 0xffffffff;
+    if (!nnResultIsFailure(result))
+    {
+        if (got > 0)
+            return CURLE_UNSUPPORTED_PROTOCOL;
+        if (got == 0)
+            return CURLE_OK;
+        return -1;
+    }
+
+    if (nnResultGetModule(result) != nnResultGetModule(NNSSL_RESULT_WOULDBLOCK))
+        return -1;
+
+    if (nnResultGetDescription(result) != nnResultGetDescription(NNSSL_RESULT_WOULDBLOCK))
+        return -1;
+
+    return 1;
 }
 
 int Curl_nnssl_seed(struct SessionHandle* data)
@@ -90,11 +150,11 @@ bool Curl_nnssl_false_start(void)
     return false;
 }
 
-bool Curl_nnssl_data_pending(const struct connectdata* conn, int connindex)
+bool Curl_nnssl_data_pending(const struct connectdata* conn, int sockindex)
 {
-    int connection = 0;
-    int result = nnsslConnectionPending(&conn->ssl[connindex].nnssl_connection, &connection);
-    return nnResultIsSuccess(result & 0xffffffff) && connection > 0;
+    int pending = 0;
+    int result = nnsslConnectionPending(&conn->ssl[sockindex].backend.connection, &pending);
+    return nnResultIsSuccess(result & 0xffffffff) && pending > 0;
 }
 
 #endif /* USE_NNSSL */
