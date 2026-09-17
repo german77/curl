@@ -444,15 +444,13 @@ typedef int sig_atomic_t;
  * (or equivalent) on this platform to hide platform details to code using it.
  */
 
-/*#if defined(WIN32) && !defined(USE_LWIPSOCK)
+#if defined(WIN32) && !defined(USE_LWIPSOCK)
 #define ERRNO         ((int)GetLastError())
 #define SET_ERRNO(x)  (SetLastError((DWORD)(x)))
 #else
 #define ERRNO         (errno)
 #define SET_ERRNO(x)  (errno = (x))
-#endif*/
-#define ERRNO         (*__errno_location())
-#define SET_ERRNO(x)  (__errno_location()) // TODO: THIS IS WRONG
+#endif
 
 /*
  * Portable error number symbolic names defined to Winsock error codes.

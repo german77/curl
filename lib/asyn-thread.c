@@ -306,7 +306,7 @@ static unsigned int CURL_STDCALL gethostbyname_thread (void *arg)
   struct thread_sync_data *tsd = (struct thread_sync_data *)arg;
   struct thread_data *td = tsd->td;
 
-  tsd->res = Curl_ipv4_resolve_r(tsd->hostname, tsd->port);
+  tsd->res = Curl_ipv4_resolve_r(tsd->hostname, tsd->port, tsd->sock_error);
 
   if(!tsd->res) {
     tsd->sock_error = SOCKERRNO;
@@ -578,7 +578,7 @@ Curl_addrinfo *Curl_resolver_getaddrinfo(struct connectdata *conn,
   }
 
   /* fall-back to blocking version */
-  return Curl_ipv4_resolve_r(hostname, port);
+  return Curl_ipv4_resolve_r(hostname, port, 0);
 }
 
 #else /* !HAVE_GETADDRINFO */

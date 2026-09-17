@@ -494,6 +494,7 @@
 #  define CURLRES_THREADED
 #else
 #  define CURLRES_ASYNCH
+#  define CURLRES_THREADED
 #endif
 
 #ifdef ENABLE_IPV6

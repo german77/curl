@@ -108,7 +108,7 @@ Curl_addrinfo *Curl_getaddrinfo(struct connectdata *conn,
  *
  */
 Curl_addrinfo *Curl_ipv4_resolve_r(const char *hostname,
-                                   int port)
+                                   int port, int sock_error)
 {
 #if !defined(HAVE_GETADDRINFO_THREADSAFE) && defined(HAVE_GETHOSTBYNAME_R_3)
   int res;
@@ -279,7 +279,7 @@ Curl_addrinfo *Curl_ipv4_resolve_r(const char *hostname,
      * gethostbyname() is the preferred one.
      */
   else {
-    h = gethostbyname((void*)hostname);
+    h = nnCurlShim_gethostbyname((void*)hostname, sock_error);
 #endif /* HAVE_GETADDRINFO_THREADSAFE || HAVE_GETHOSTBYNAME_R */
   }
 
