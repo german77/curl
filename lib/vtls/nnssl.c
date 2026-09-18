@@ -73,6 +73,21 @@ void Curl_nnssl_close(struct connectdata* conn, int sockindex)
         nnssl_destroy_ssl_context(conn, sockindex);
 }
 
+int Curl_nnssl_init(void)
+{
+    size_t result = nnsslInitialize() & 0xffffffff;
+    if (!nnResultIsFailure(result))
+    {
+        return CURLE_UNSUPPORTED_PROTOCOL;
+    }
+
+    if (nnResultGetModule(result) == nnResultGetModule(NNSSL_RESULT_FATAL) &&
+        nnResultGetDescription(result) == nnResultGetDescription(NNSSL_RESULT_FATAL))
+        return CURLE_UNSUPPORTED_PROTOCOL;
+
+    return CURLE_OK;
+}
+
 void Curl_nnssl_cleanup(void)
 {
     nnsslFinalize();
@@ -84,6 +99,30 @@ CURLcode Curl_nnssl_connect(struct connectdata* conn, int sockindex)
         return CURLE_SSL_INVALIDREFERENCE;
 
     return CURLE_NOT_BUILT_IN;
+}
+
+CURLcode Curl_nnssl_connect_nonblocking(struct connectdata* conn, int sockindex, bool* done)
+{
+    if (conn == NULL || done == NULL)
+        return CURLE_SSL_INVALIDREFERENCE;
+
+    struct ssl_connect_data* connssl = &conn->ssl[sockindex];
+
+    if (connssl->state == ssl_connection_complete)
+    {
+        *done = true;
+        return CURLE_OK;
+    }
+
+    struct SessionHandle* data = conn->data;
+    int value = connssl->backend.value;
+    CURLcode result = CURLE_OK;
+
+    if (connssl->backend.value == 0)
+    {
+        // TODO: finish implementation
+    }
+    return result;
 }
 
 size_t Curl_nnssl_version(char* buffer, size_t size)
@@ -132,11 +171,10 @@ int Curl_nnssl_random(struct SessionHandle* data, unsigned char* entropy, size_t
     if (entropy == NULL || data == NULL)
         return 0;
 
-    for (size_t i = 0; i < length; i++)
+    for (unsigned int i = 0; i < length; i++)
     {
         entropy[i] = 0;
     }
-
     return 0;
 }
 

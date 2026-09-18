@@ -334,7 +334,8 @@ static unsigned int CURL_STDCALL gethostbyname_thread (void *arg)
 /*
  * destroy_async_data() cleans up async resolver data and thread handle.
  */
-static void destroy_async_data (struct Curl_async *async)
+// TODO: REQUIRES PROPER THREADS remove the noinline
+static void __attribute__ ((noinline)) destroy_async_data (struct Curl_async *async)
 {
   if(async->os_specific) {
     struct thread_data *td = (struct thread_data*) async->os_specific;

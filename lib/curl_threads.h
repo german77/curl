@@ -56,7 +56,7 @@
 #  define Curl_mutex_release(m)  pthread_mutex_unlock(m)
 #  define Curl_mutex_destroy(m)  pthread_mutex_destroy(m)
 
-#if defined(USE_THREADS_POSIX) || defined(USE_THREADS_WIN32)
+#if defined(USE_THREADS_POSIX) || defined(USE_THREADS_WIN32) || defined(USE_THREADS_SIGLO)
 
 curl_thread_t Curl_thread_create(unsigned int (CURL_STDCALL *func) (void*),
                                  void *arg);
@@ -65,6 +65,6 @@ void Curl_thread_destroy(curl_thread_t hnd);
 
 int Curl_thread_join(curl_thread_t *hnd);
 
-#endif /* USE_THREADS_POSIX || USE_THREADS_WIN32 */
+#endif /* USE_THREADS_POSIX || USE_THREADS_WIN32 || USE_THREADS_SIGLO */
 
 #endif /* HEADER_CURL_THREADS_H */

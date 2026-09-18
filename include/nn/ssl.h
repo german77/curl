@@ -16,6 +16,7 @@ struct nnsslBackend  // TODO: Validate members
     struct Context context;
     struct Context* pnnssl_context; /* active context (embedded or external) */
     char using_external_ssl_context;
+    int value;
 };
 
 extern void nnosSleepThread();

@@ -444,12 +444,15 @@ typedef int sig_atomic_t;
  * (or equivalent) on this platform to hide platform details to code using it.
  */
 
+// TODO: figure out how to implement this properly
+extern int* nnerrno(void);
+
 #if defined(WIN32) && !defined(USE_LWIPSOCK)
 #define ERRNO         ((int)GetLastError())
 #define SET_ERRNO(x)  (SetLastError((DWORD)(x)))
 #else
-#define ERRNO         (errno)
-#define SET_ERRNO(x)  (errno = (x))
+#define ERRNO         (*nnerrno())
+#define SET_ERRNO(x)  (ERRNO = (x))
 #endif
 
 /*

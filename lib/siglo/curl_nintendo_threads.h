@@ -15,18 +15,25 @@ typedef struct GCThread
 {
     int status;
     int references;
-    struct ThreadType thread;
+    void* filler3;
     void* event;
+    void* filler[4];
+    struct ThreadType* thread;
+    void* filler2[3];
+    struct curl_llist* activeList;
+    struct curl_llist* inactiveList;
 } GCThread;
 
-ThreadType* Curl_SigloThreadContextConstructor(long stack_size, void (*somethingA)(size_t), long somethingB);
+int Curl_GetTotalThreadCount();
+ThreadType* Curl_SigloThreadContextConstructor(long stack_size, void (*somethingA)(size_t),
+                                               long somethingB);
 void Curl_SigloThreadEntryThunk(ThreadType*);
 void Curl_SigloThreadContextDestructor(ThreadType* thread);
 void Curl_SigloThreadGCZero();
 bool Curl_SigloThreadGCInitialize();
 void Curl_SigloThreadGCRunLoop();
-void Curl_SigloThreadGCSetActive();
-void Curl_SigloThreadGCSetInactive(ThreadType* thread);
+int Curl_SigloThreadGCSetActive();
+int Curl_SigloThreadGCSetInactive(ThreadType* thread);
 void Curl_SigloThreadGCFinalize();
 void Curl_SigloMiddlewareInfo();
 
