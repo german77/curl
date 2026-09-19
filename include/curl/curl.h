@@ -2125,6 +2125,7 @@ typedef enum {
   CURLINFO_LOCAL_IP         = CURLINFO_STRING + 41,
   CURLINFO_LOCAL_PORT       = CURLINFO_LONG   + 42,
   CURLINFO_TLS_SESSION      = CURLINFO_SLIST  + 43,
+  CURLINFO_NN_SSL           = CURLINFO_LONG   + 44,
   /* Fill in new entries below here! */
 
   CURLINFO_LASTONE          = 43

@@ -346,7 +346,7 @@ struct ssl_config_data {
   bool verifypeer;       /* set TRUE if this is desired */
   bool verifyhost;       /* set TRUE if CN/SAN must match hostname */
   bool verifystatus;     /* set TRUE if certificate status must be checked */
-  void* filler [5];      /* TODO: NINTENDO STUFF find exact location */
+  long* filler [5];      /* TODO: NINTENDO STUFF find exact location */
   char *CApath;          /* certificate dir (doesn't work on windows) */
   char *CAfile;          /* certificate to verify peer against */
   const char *CRLfile;   /* CRL to check certificate revocation */

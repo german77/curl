@@ -230,9 +230,10 @@ CURLcode curl_global_init(long flags)
   Curl_SigloAllocatorInitializeDefaults();
   Curl_SigloMiddlewareInfo();
 
-  if(!Curl_SigloThreadGCInitialize())
+  if(!Curl_SigloThreadGCInitialize()){
+    DEBUGF(fprintf(stderr, "Error: Curl_SigloThreadGCInitialize failed\n"));
     return CURLE_FAILED_INIT;
-
+  }
 
   if(flags & CURL_GLOBAL_SSL)
     if(!Curl_ssl_init()) {
@@ -283,15 +284,17 @@ CURLcode curl_global_init(long flags)
   return CURLE_OK;
 }
 
-CURLcode curl_global_init_internal(void* something,long flags)
+CURLcode curl_global_init_internal(int is_initialized,long flags)
 {
   Curl_SigloMiddlewareInfo();
 
-  if(something || initialized++)
+  if(is_initialized & 1 && initialized++)
     return CURLE_OK;
 
-  if(!Curl_SigloThreadGCInitialize())
+  if(!Curl_SigloThreadGCInitialize()){
+    DEBUGF(fprintf(stderr, "Error: Curl_SigloThreadGCInitialize failed\n"));
     return CURLE_FAILED_INIT;
+  }
 
   if(flags & CURL_GLOBAL_SSL)
     if(!Curl_ssl_init()) {
@@ -299,10 +302,15 @@ CURLcode curl_global_init_internal(void* something,long flags)
       return CURLE_FAILED_INIT;
     }
 
-  if(!Curl_resolver_global_init()) {
+  if(Curl_resolver_global_init()) {
     DEBUGF(fprintf(stderr, "Error: resolver_global_init failed\n"));
     return CURLE_FAILED_INIT;
   }
+
+  if(flags & CURL_GLOBAL_ACK_EINTR)
+    Curl_ack_eintr = 1;
+
+  init_flags  = flags;
 
   return CURLE_OK;
 }
@@ -329,8 +337,8 @@ CURLcode curl_global_init_mem(long flags, curl_malloc_callback m,
     return CURLE_OK;
   }
 
-  /* Call the actual init function first */
-  result = curl_global_init_internal(Curl_SigloAllocatorInitializeDefaults(),flags);
+  Curl_SigloAllocatorInitialize(m,f,r,s,c);
+  result = curl_global_init_internal(1,flags);
 
   return result;
 }

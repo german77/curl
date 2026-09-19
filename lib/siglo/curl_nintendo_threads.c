@@ -15,10 +15,10 @@ int Curl_GetTotalThreadCount()
     if (!g_garbageCollectorThread.status)
         return -1;
 
-    nnosLockMutex(&g_garbageCollectorThread.thread);
+    nnosLockMutex(&g_garbageCollectorThread.mutex);
     int count = Curl_llist_count(g_garbageCollectorThread.activeList) +
                 Curl_llist_count(g_garbageCollectorThread.inactiveList);
-    nnosLockMutex(&g_garbageCollectorThread.thread);
+    nnosLockMutex(&g_garbageCollectorThread.mutex);
     return count;
 }
 
@@ -39,7 +39,7 @@ ThreadType* Curl_SigloThreadContextConstructor(long stack_size, void (*something
             result = nnosCreateThread(thread, Curl_SigloThreadEntryThunk, thread, stack, stack_size,
                                       priority);
 
-            if (!nnResultIsFailure(result))
+            if (!nnResultIsFailure(result & 0xffffffff))
             {
                 nnosSetThreadNamePointer(thread, "LibcurlResolver");
                 thread->somethingA = somethingA;
@@ -50,14 +50,13 @@ ThreadType* Curl_SigloThreadContextConstructor(long stack_size, void (*something
         {
             Curl_SigloFree(thread);
             thread = NULL;
-            result = -1;
         }
     }
 
-    if (nnResultIsFailure(result))
+    if (nnResultIsFailure(result & 0xffffffff))
     {
         Curl_SigloThreadContextDestructor(thread);
-        thread = NULL;
+        return NULL;
     }
 
     return thread;
@@ -89,12 +88,10 @@ void Curl_SigloThreadContextDestructor(ThreadType* thread)
 
 void Curl_SigloThreadGCZero()
 {
-    GCThread* thread = &g_garbageCollectorThread;
-
-    thread->status = 0;
-    memset(thread->event, 0, 0x58);
+    g_garbageCollectorThread.status = 0;
+  memset(&g_garbageCollectorThread.event,0,0x58);
 }
-bool Curl_SigloThreadGCInitialize();
+long Curl_SigloThreadGCInitialize();
 void Curl_SigloThreadGCRunLoop();
 
 int Curl_SigloThreadGCSetActive(void* p)
@@ -103,10 +100,10 @@ int Curl_SigloThreadGCSetActive(void* p)
     NN_ASSERT(g_garbageCollectorThread.status,
               "Adding a thread structure to the garbage collector when it is uninitialized")
 
-    nnosLockMutex(&g_garbageCollectorThread.thread);
+    nnosLockMutex(&g_garbageCollectorThread.mutex);
     bool value = Curl_llist_insert_next(g_garbageCollectorThread.activeList,
                                         g_garbageCollectorThread.activeList->tail, p);
-    nnosUnlockMutex(&g_garbageCollectorThread.thread);
+    nnosUnlockMutex(&g_garbageCollectorThread.mutex);
 
     if (value)
         return 0;
@@ -130,7 +127,7 @@ int Curl_removeThreadContextFromList(struct curl_llist* list, void* e)
 
     return -1;
 }
-int Curl_addThreadContextToList(struct curl_llist* list, void* e)
+static int Curl_addThreadContextToList(struct curl_llist* list, void* e)
 {
     bool value = Curl_llist_insert_next(list, list->tail, e);
 
@@ -146,7 +143,7 @@ int Curl_SigloThreadGCSetInactive(ThreadType* thread)
     NN_ASSERT(g_garbageCollectorThread.status,
               "Adding a thread structure to the garbage collector when it is uninitialized")
 
-    nnosLockMutex(&g_garbageCollectorThread.thread);
+    nnosLockMutex(&g_garbageCollectorThread.mutex);
 
 #line 428
     NN_ASSERT(Curl_removeThreadContextFromList(g_garbageCollectorThread.activeList, thread) == 0,
@@ -159,7 +156,7 @@ int Curl_SigloThreadGCSetInactive(ThreadType* thread)
               "in the active list")
 
     nnosSignalEvent(&g_garbageCollectorThread.event);
-    nnosUnlockMutex(&g_garbageCollectorThread.thread);
+    nnosUnlockMutex(&g_garbageCollectorThread.mutex);
     return 0;
 }
 void Curl_SigloThreadGCFinalize();

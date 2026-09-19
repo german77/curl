@@ -445,13 +445,13 @@ typedef int sig_atomic_t;
  */
 
 // TODO: figure out how to implement this properly
-extern int* nnerrno(void);
+extern int* nn_errno_location(void);
 
 #if defined(WIN32) && !defined(USE_LWIPSOCK)
 #define ERRNO         ((int)GetLastError())
 #define SET_ERRNO(x)  (SetLastError((DWORD)(x)))
 #else
-#define ERRNO         (*nnerrno())
+#define ERRNO         (*nn_errno_location())
 #define SET_ERRNO(x)  (ERRNO = (x))
 #endif
 

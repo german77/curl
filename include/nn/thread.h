@@ -12,7 +12,7 @@ extern void nnosInitializeEvent(struct ThreadType* thread);
 extern void nnosFinalizeEvent(struct ThreadType* thread);
 extern void nnosWaitEvent(struct ThreadType* thread);
 
-extern void nnosInitializeMutex(struct ThreadType* thread);
-extern void nnosFinalizeMutex(struct ThreadType* thread);
-extern void nnosLockMutex(struct ThreadType* thread);
-extern void nnosUnlockMutex(struct ThreadType* thread);
+extern void nnosInitializeMutex(struct MutexType* thread);
+extern void nnosFinalizeMutex(struct MutexType* thread);
+extern void nnosLockMutex(struct MutexType* thread);
+extern void nnosUnlockMutex(struct MutexType* thread);

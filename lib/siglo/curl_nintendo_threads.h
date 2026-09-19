@@ -11,15 +11,19 @@ typedef struct ThreadType
     void* stack;
 } ThreadType;
 
+typedef struct MutexType
+{
+    void* filler[0x4];
+} MutexType;
+
 typedef struct GCThread
 {
     int status;
     int references;
     void* filler3;
-    void* event;
+    int event;
     void* filler[4];
-    struct ThreadType* thread;
-    void* filler2[3];
+    MutexType mutex;
     struct curl_llist* activeList;
     struct curl_llist* inactiveList;
 } GCThread;
@@ -30,7 +34,7 @@ ThreadType* Curl_SigloThreadContextConstructor(long stack_size, void (*something
 void Curl_SigloThreadEntryThunk(ThreadType*);
 void Curl_SigloThreadContextDestructor(ThreadType* thread);
 void Curl_SigloThreadGCZero();
-bool Curl_SigloThreadGCInitialize();
+long Curl_SigloThreadGCInitialize();
 void Curl_SigloThreadGCRunLoop();
 int Curl_SigloThreadGCSetActive();
 int Curl_SigloThreadGCSetInactive(ThreadType* thread);

@@ -148,6 +148,10 @@ static CURLcode getinfo_long(struct SessionHandle *data, CURLINFO info,
   case CURLINFO_SSL_VERIFYRESULT:
     *param_longp = data->set.ssl.certverifyresult;
     break;
+  // TODO: Find out what this is and put proper names
+  case CURLINFO_NN_SSL:
+    *param_longp = data->set.ssl.filler[1];
+    break;
   case CURLINFO_REDIRECT_COUNT:
     *param_longp = data->set.followlocation;
     break;
