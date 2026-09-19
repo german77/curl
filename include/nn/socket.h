@@ -1,7 +1,7 @@
 #pragma once
 
-#include <netinet/in.h>
 #include <netdb.h>
+#include <netinet/in.h>
 #include <nn/types.h>
 #include <poll.h>
 #include <sys/select.h>
@@ -45,8 +45,10 @@ s32 nnsocketOpen(const char*, int);
 u32 nnsocketInitialize(void* pool, ulong poolSize, ulong allocPoolSize, int concurLimit);
 s32 nnsocketFinalize();
 s32 nnsocketGetAddrinfo(const char*, const char*, const struct addrinfo*, struct addrinfo**);
-s32 nnsocketGetAdrinfoCancel(const char*, const char*, const struct addrinfo*, struct addrinfo**, int);
-s32 nnsocketGetAddrinfoWithoutNsdResolve(const char*, const char*, const struct addrinfo*, struct addrinfo**);
+s32 nnsocketGetAdrinfoCancel(const char*, const char*, const struct addrinfo*, struct addrinfo**,
+                             int);
+s32 nnsocketGetAddrinfoWithoutNsdResolve(const char*, const char*, const struct addrinfo*,
+                                         struct addrinfo**);
 s32 nnsocketGetAddrinfoWithoutNsdResolveCancel(const char*, const char*, const struct addrinfo*,
                                                struct addrinfo**, int);
 s32 nnsocketFreeAddrinfo(struct addrinfo*);
@@ -65,4 +67,3 @@ s32 nnsocketHStrError(int);
 s32 nnsocketGAIStrError(int);
 s32 nnsocketSysctl(int*, ulong, void*, ulong*, void*, ulong);
 s32 nnsocketDuplicateSocket(int, ulong);
-

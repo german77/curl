@@ -1167,7 +1167,7 @@ CURLcode Curl_connecthost(struct connectdata *conn,  /* context */
   }
 
   if(conn->tempsock[0] == CURL_SOCKET_BAD)
-    return result;
+    return result == 0? CURLE_COULDNT_CONNECT : result;
 
   data->info.numconnects++; /* to track the number of connections made */
 
