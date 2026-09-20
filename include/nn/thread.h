@@ -1,5 +1,20 @@
 #pragma once
 
+typedef struct MutexType
+{
+    void* filler[0x4];
+} MutexType;
+
+struct ThreadType  // nn::os::ThreadType
+{
+    char filler[0x1c0];
+};
+
+typedef struct EventType
+{
+    void* filler[0x5];
+} EventType;
+
 enum EventClearMode
 {
     EventClearMode_ManualClear = 0,

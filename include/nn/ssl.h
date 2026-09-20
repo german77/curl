@@ -19,7 +19,7 @@ struct nnsslBackend  // TODO: Validate members
     int value;
 };
 
-extern void nnosSleepThread();
+extern void nnosSleepThread(long us);
 
 extern size_t nnsslInitialize(void);
 extern size_t nnsslFinalize(void);

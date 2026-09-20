@@ -48,13 +48,13 @@
 #  define Curl_mutex_destroy(m)  DeleteCriticalSection(m)
 #endif
 #  define CURL_STDCALL
-#  define curl_mutex_t           pthread_mutex_t
+#  define curl_mutex_t           struct MutexType
 #  define curl_thread_t          pthread_t *
 #  define curl_thread_t_null     (pthread_t *)0
-#  define Curl_mutex_init(m)     pthread_mutex_init(m, NULL)
-#  define Curl_mutex_acquire(m)  pthread_mutex_lock(m)
-#  define Curl_mutex_release(m)  pthread_mutex_unlock(m)
-#  define Curl_mutex_destroy(m)  pthread_mutex_destroy(m)
+#  define Curl_mutex_init(m)     nnosInitializeMutex(m, 0, 1)
+#  define Curl_mutex_acquire(m)  nnosLockMutex(m)
+#  define Curl_mutex_release(m)  nnosUnlockMutex(m)
+#  define Curl_mutex_destroy(m)  nnosFinalizeMutex(m)
 
 #if defined(USE_THREADS_POSIX) || defined(USE_THREADS_WIN32) || defined(USE_THREADS_SIGLO)
 

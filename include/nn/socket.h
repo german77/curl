@@ -148,6 +148,7 @@ enum Errno
     EProcLim = 156,
 };
 
+extern int nnsocketGetLastError();
 extern int nnsocketRecv(int socket, void* out, ulong outLen, int flags);
 extern int nnsocketRecvFrom(int, void*, ulong, int, struct sockaddr*, u32*);
 extern int nnsocketSend(int socket, const void* data, ulong dataLen, int flags);

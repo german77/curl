@@ -74,6 +74,7 @@
 
 /* The last #include file should be: */
 #include "memdebug.h"
+#include "nn/thread.h"
 
 /***********************************************************************
  * Only for threaded name resolves builds
@@ -137,14 +138,6 @@ int Curl_resolver_duphandle(void **to, void *from)
 
 static void destroy_async_data(struct Curl_async *);
 
-/*
- * Cancel all possibly still on-going resolves for this connection.
- */
-void Curl_resolver_cancel(struct connectdata *conn)
-{
-  destroy_async_data(&conn->async);
-}
-
 /* This function is used to init a threaded resolve */
 static bool init_resolve_thread(struct connectdata *conn,
                                 const char *hostname, int port,
@@ -164,6 +157,7 @@ struct thread_sync_data {
 #ifdef HAVE_GETADDRINFO
   struct addrinfo hints;
 #endif
+  int cancel_handle;
   struct thread_data *td; /* for thread-self cleanup */
 };
 
@@ -173,6 +167,22 @@ struct thread_data {
   long interval_end;
   struct thread_sync_data tsd;
 };
+
+/*
+ * Cancel all possibly still on-going resolves for this connection.
+ */
+void Curl_resolver_cancel(struct connectdata *conn)
+{
+  struct thread_data* data = conn->async.os_specific;
+
+  if (data != NULL) {
+    while (nnsocketCancel(data->tsd.cancel_handle) == -1 && nnsocketGetLastError() == EAgain) {
+      nnosSleepThread(10000000);
+    }
+  }
+
+  destroy_async_data(&conn->async);
+}
 
 static struct thread_sync_data *conn_thread_sync_data(struct connectdata *conn)
 {
@@ -225,6 +235,13 @@ int init_thread_sync_data(struct thread_data * td,
   Curl_mutex_init(tsd->mtx);
 
   tsd->sock_error = CURL_ASYNC_SUCCESS;
+
+  tsd->cancel_handle = nnsocketRequestCancelHandle();
+  while (tsd->cancel_handle == 0 && nnsocketGetLastError() == EAgain)
+  {
+    nnosSleepThread(10000000);
+    tsd->cancel_handle = nnsocketRequestCancelHandle();
+  }
 
   /* Copying hostname string because original can be destroyed by parent
    * thread during gethostbyname execution.
@@ -334,7 +351,7 @@ static unsigned int CURL_STDCALL gethostbyname_thread (void *arg)
 /*
  * destroy_async_data() cleans up async resolver data and thread handle.
  */
-// TODO: REQUIRES PROPER THREADS remove the noinline
+// TODO: Why this is inlined?
 static void __attribute__ ((noinline)) destroy_async_data (struct Curl_async *async)
 {
   if(async->os_specific) {
