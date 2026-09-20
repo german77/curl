@@ -3,41 +3,60 @@
 
 #include <stdint.h>
 
-typedef struct ThreadType
+struct ThreadType  // nn::os::ThreadType
 {
     char filler[0x1c0];
-    void (*somethingA)(size_t);
-    long somethingB;
+};
+
+typedef struct SigloThread
+{
+    struct ThreadType nnThread;
+    int (*threadLoop)(void*);
+    void* somethingB;
     void* stack;
-} ThreadType;
+} SigloThread;
 
 typedef struct MutexType
 {
     void* filler[0x4];
 } MutexType;
 
+typedef struct EventType
+{
+    void* filler[0x5];
+} EventType;
+
+enum GCThreadStatus
+{
+    GCThreadStatus_Uninitialized,
+    GCThreadStatus_Initialized,
+    GCThreadStatus_Running,
+    GCThreadStatus_Busy,
+    GCThreadStatus_Stopped,
+};
+
 typedef struct GCThread
 {
-    int status;
+    enum GCThreadStatus status;
     int references;
-    void* filler3;
-    int event;
-    void* filler[4];
+    SigloThread* currentThread;
+    struct EventType statusUpdateEvent;
     MutexType mutex;
-    struct curl_llist* activeList;
-    struct curl_llist* inactiveList;
+    struct curl_llist* activeThreads;
+    struct curl_llist* inactiveThreads;
+    struct EventType startEvent;
 } GCThread;
 
 int Curl_GetTotalThreadCount();
-ThreadType* Curl_SigloThreadContextConstructor(long stack_size, void (*somethingA)(size_t),
-                                               long somethingB);
-void Curl_SigloThreadEntryThunk(ThreadType*);
-void Curl_SigloThreadContextDestructor(ThreadType* thread);
+SigloThread* Curl_SigloThreadContextConstructor(long stack_size, int (*somethingA)(void*),
+                                                void* somethingB);
+void Curl_SigloThreadEntryThunk(struct ThreadType*);
+void Curl_SigloThreadContextDestructor(SigloThread* thread);
 void Curl_SigloThreadGCZero();
-long Curl_SigloThreadGCInitialize();
-void Curl_SigloThreadGCRunLoop();
+GCThread* Curl_SigloThreadGCInitialize();
+int Curl_SigloThreadGCRunLoop(void* somethingB);
 int Curl_SigloThreadGCSetActive();
-int Curl_SigloThreadGCSetInactive(ThreadType* thread);
+int Curl_SigloThreadGCSetInactive(SigloThread* thread);
 void Curl_SigloThreadGCFinalize();
 void Curl_SigloMiddlewareInfo();
 
