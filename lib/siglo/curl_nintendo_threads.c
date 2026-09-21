@@ -18,7 +18,7 @@ int Curl_GetTotalThreadCount()
     nnosLockMutex(&g_garbageCollectorThread.mutex);
     int count = Curl_llist_count(g_garbageCollectorThread.activeThreads) +
                 Curl_llist_count(g_garbageCollectorThread.inactiveThreads);
-    nnosLockMutex(&g_garbageCollectorThread.mutex);
+    nnosUnlockMutex(&g_garbageCollectorThread.mutex);
     return count;
 }
 
@@ -156,7 +156,7 @@ GCThread* Curl_SigloThreadGCInitialize()
 int Curl_SigloThreadGCRunLoop(void* somethingB)
 {
     g_garbageCollectorThread.status = GCThreadStatus_Running;
-    nnosWaitEvent(&g_garbageCollectorThread.startEvent);
+    nnosSignalEvent(&g_garbageCollectorThread.startEvent);
 
     do
     {

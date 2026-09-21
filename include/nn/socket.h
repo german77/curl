@@ -149,9 +149,9 @@ enum Errno
 };
 
 extern int nnsocketGetLastError();
-extern int nnsocketRecv(int socket, void* out, ulong outLen, int flags);
+extern long nnsocketRecv(int socket, void* out, ulong outLen, int flags);
 extern int nnsocketRecvFrom(int, void*, ulong, int, struct sockaddr*, u32*);
-extern int nnsocketSend(int socket, const void* data, ulong dataLen, int flags);
+extern long nnsocketSend(int socket, const void* data, ulong dataLen, int flags);
 extern int nnsocketSendTo(int, const void*, ulong, int, const struct sockaddr*, u32);
 extern int nnsocketAccept(int, struct sockaddr*, u32*);
 extern int nnsocketBind(int, const struct sockaddr*, u32);
@@ -163,12 +163,12 @@ extern int nnsocketListen(int, int);
 extern int nnsocketSetSockOpt(int socket, int socketLevel, int option, const void*, u32 len);
 extern int nnsocketSockAtMark(int);
 extern int nnsocketShutdown(int, int);
-extern int nnsocketSocket();
+extern int nnsocketSocket(int,int,int);
 extern int nnsocketWrite(int domain, int type, int protocol);
 extern int nnsocketRead(int, int, int);
 extern u32 nnsocketClose();  // returns nn::Result
 extern void nnsocketSelect(int, fd_set*, fd_set*, fd_set*, struct timeval*);
-extern void nnsocketPoll(struct pollfd*, ulong, int);
+extern int nnsocketPoll(struct pollfd*, ulong, int);
 extern int nnsocketFcntl(int, int, ...);
 extern void nnsocketInetPton(int, const char*, void*);
 extern const char* nnsocketInetNtop(int af, const void* src, char* dst, u32 size);

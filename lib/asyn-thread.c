@@ -176,7 +176,7 @@ void Curl_resolver_cancel(struct connectdata *conn)
   struct thread_data* data = conn->async.os_specific;
 
   if (data != NULL) {
-    while (nnsocketCancel(data->tsd.cancel_handle) == -1 && nnsocketGetLastError() == EAgain) {
+    while (nnsocketCancel(data->tsd.cancel_handle) == -1 && SOCKERRNO == EAgain) {
       nnosSleepThread(10000000);
     }
   }
@@ -237,7 +237,7 @@ int init_thread_sync_data(struct thread_data * td,
   tsd->sock_error = CURL_ASYNC_SUCCESS;
 
   tsd->cancel_handle = nnsocketRequestCancelHandle();
-  while (tsd->cancel_handle == 0 && nnsocketGetLastError() == EAgain)
+  while (tsd->cancel_handle == 0 && SOCKERRNO == EAgain)
   {
     nnosSleepThread(10000000);
     tsd->cancel_handle = nnsocketRequestCancelHandle();

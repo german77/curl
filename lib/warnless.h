@@ -97,9 +97,9 @@ unsigned short curlx_ntohs(unsigned short usnum);
 #  undef  FD_ZERO
 #  define FD_ZERO(a)    curlx_FD_ZERO((a))
 #  undef  htons
-#  define htons(a)      nnsocketInetHtons((a))
+#  define htons(a)      curlx_htons((a))
 #  undef  ntohs
-#  define ntohs(a)      nnsocketInetNtohs((a))
+#  define ntohs(a)      curlx_ntohs((a))
 #endif
 
 #endif /* __INTEL_COMPILER && __unix__ */

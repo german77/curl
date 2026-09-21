@@ -346,7 +346,8 @@ struct ssl_config_data {
   bool verifypeer;       /* set TRUE if this is desired */
   bool verifyhost;       /* set TRUE if CN/SAN must match hostname */
   bool verifystatus;     /* set TRUE if certificate status must be checked */
-  long* filler [5];      /* TODO: NINTENDO STUFF find exact location */
+  bool verifynnOption;    /* TODO: NINTENDO STUFF check name */
+  long filler [5];      /* TODO: NINTENDO STUFF find exact location */
   char *CApath;          /* certificate dir (doesn't work on windows) */
   char *CAfile;          /* certificate to verify peer against */
   const char *CRLfile;   /* CRL to check certificate revocation */
@@ -1436,7 +1437,8 @@ struct UserDefined {
   long use_port;     /* which port to use (when not using default) */
   unsigned long httpauth;  /* kind of HTTP authentication to use (bitmask) */
   unsigned long proxyauth; /* kind of proxy authentication to use (bitmask) */
-  unsigned long socks5auth; /* TODO: NINTENDO STUFF validate name*/
+  char nnOptionA;    /* TODO: NINTENDO STUFF validate name*/
+  char nnOptionB;    /* TODO: NINTENDO STUFF validate name*/
   long followlocation; /* as in HTTP Location: */
   long maxredirs;    /* maximum no. of http(s) redirects to follow, set to -1
                         for infinity */
@@ -1445,7 +1447,6 @@ struct UserDefined {
                         bit represents a request, from 301 to 303 */
   bool free_referer; /* set TRUE if 'referer' points to a string we
                         allocated */
-
   void *postfields;  /* if POST, set the fields' values here */
   curl_seek_callback seek_func;      /* function that seeks the input */
   curl_off_t postfieldsize; /* if POST, this might have a size to use instead

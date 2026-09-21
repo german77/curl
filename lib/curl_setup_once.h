@@ -276,6 +276,17 @@ struct timeval {
 #  define sfcntl  nnsocketFcntl
 #endif
 
+
+#define htons(a)  nnsocketInetHtons(a)
+#define ntohs(a)  nnsocketInetNtohs(a)
+
+#define socket(a,b,c)  nnsocketSocket(a,b,c)
+#define recv(a,b,c,d)  nnsocketRecv(a,b,c,d)
+#define poll(a,b,c)  nnsocketPoll(a,b,c)
+#define send(a,b,c,d)  nnsocketSend(a,b,c,d)
+#define getpeername(a,b,c)  nnsocketGetPeerName(a,b,c)
+#define getsockname(a,b,c)  nnsocketGetSockName(a,b,c)
+
 /*
  * Uppercase macro versions of ANSI/ISO is*() functions/macros which
  * avoid negative number inputs with argument byte codes > 127.

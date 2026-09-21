@@ -489,7 +489,7 @@
 /* now undef the stock libc functions just to avoid them being used */
 #  undef HAVE_GETADDRINFO
 #  undef HAVE_GETHOSTBYNAME
-#elif defined(USE_THREADS_POSIX) || defined(USE_THREADS_WIN32) | defined(USE_THREADS_SIGLO)
+#elif defined(USE_THREADS_POSIX) || defined(USE_THREADS_WIN32) || defined(USE_THREADS_SIGLO)
 #  define CURLRES_ASYNCH
 #  define CURLRES_THREADED
 #else

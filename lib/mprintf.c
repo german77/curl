@@ -1107,6 +1107,7 @@ int curl_mprintf(const char *format, ...)
   int retcode;
   va_list ap_save; /* argument pointer */
   va_start(ap_save, format);
+
   retcode = nnCurlShim_vprintf(format, ap_save);
   va_end(ap_save);
   return retcode;

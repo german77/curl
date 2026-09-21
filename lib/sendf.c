@@ -656,8 +656,6 @@ static int showit(struct SessionHandle *data, curl_infotype type,
   case CURLINFO_TEXT:
   case CURLINFO_HEADER_OUT:
   case CURLINFO_HEADER_IN:
-    //fwrite(s_infotype[type], 2, 1, data->set.err);
-    //fwrite(ptr, size, 1, data->set.err);
 #ifdef CURL_DOES_CONVERSIONS
     if(size != conv_size) {
       /* we had untranslated data so we need an explicit newline */
