@@ -25,8 +25,6 @@
 #define SIZEOF_SIZE_T 8
 #define SIZEOF_TIME_T 4
 #define SIZEOF_OFF_T 8
-#define SIZEOF_CURL_OFF_T 8
-#define CURL_SIZEOF_LONG 8
 #define HAVE_LONGLONG 1
 
 /* ---- available headers ---- */
