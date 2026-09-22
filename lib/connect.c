@@ -768,6 +768,8 @@ CURLcode Curl_is_connected(struct connectdata *conn,
         infof(data, "After %ldms connect time, move on!\n",
               conn->timeoutms_per_addr);
         error = ETIMEDOUT;
+      } else {
+        error = 0;
       }
 
       /* should we try another protocol family? */

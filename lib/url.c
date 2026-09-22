@@ -551,10 +551,10 @@ CURLcode Curl_init_userdefined(struct UserDefined *set)
 #ifdef USE_TLS_SRP
   set->ssl.authtype = CURL_TLSAUTH_NONE;
 #endif
+  set->nnOptionB = 0;
+  set->ssl.verifynnOption = FALSE;
   set->ssh_auth_types = CURLSSH_AUTH_DEFAULT; /* defaults to any auth
                                                       type */
-  set->nnOptionB=0;
-  set->ssl.verifynnOption = FALSE;
   set->ssl.sessionid = TRUE; /* session ID caching enabled by default */
 
   set->new_file_perms = 0644;    /* Default permissions */
@@ -603,12 +603,12 @@ CURLcode Curl_init_userdefined(struct UserDefined *set)
   set->tcp_keepalive = FALSE;
   set->tcp_keepintvl = 60;
   set->tcp_keepidle = 60;
+  set->expect_100_timeout = 1000L; /* Wait for a second by default. */
 
   set->ssl_enable_npn = TRUE;
   set->ssl_enable_alpn = TRUE;
   set->sep_headers=TRUE;
 
-  set->expect_100_timeout = 1000L; /* Wait for a second by default. */
   return result;
 }
 

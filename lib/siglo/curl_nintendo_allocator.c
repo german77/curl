@@ -67,7 +67,7 @@ void* Curl_SigloCalloc(size_t nmemb, size_t size)
     return gAllocator.vptr.calloc(nmemb, size);
 }
 
-void** Curl_SigloAllocAligned(size_t alignment, size_t size)
+void* Curl_SigloAllocAligned(size_t alignment, size_t size)
 {
     if (!gAllocator.vptr.malloc)
         return NULL;
@@ -81,7 +81,7 @@ void** Curl_SigloAllocAligned(size_t alignment, size_t size)
 
     aligned[-1] = ptr;
 
-    return *aligned;
+    return aligned;
 }
 
 void Curl_SigloFreeAligned(void** ptr)
