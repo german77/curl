@@ -71,8 +71,8 @@ set(OS "\"${CMAKE_SYSTEM_NAME}\"")
 include_directories(${PROJECT_BINARY_DIR}/include/curl)
 include_directories( ${CURL_SOURCE_DIR}/include )
 
-option(BUILD_CURL_EXE "Set to ON to build cURL executable." ON)
-option(BUILD_CURL_TESTS "Set to ON to build cURL tests." ON)
+option(BUILD_CURL_EXE "Set to ON to build cURL executable." OFF)
+option(BUILD_CURL_TESTS "Set to ON to build cURL tests." OFF)
 option(CURL_STATICLIB "Set to ON to build libcurl with static linking." OFF)
 option(ENABLE_ARES "Set to ON to enable c-ares support" OFF)
 option(ENABLE_THREADED_RESOLVER "Set to ON to enable POSIX threaded DNS lookup" OFF)
@@ -200,7 +200,7 @@ if(ENABLE_IPV6)
   endif()
 endif()
 
-option(ENABLE_MANUAL "to provide the built-in manual" ON)
+option(ENABLE_MANUAL "to provide the built-in manual" OFF)
 unset(USE_MANUAL CACHE) # TODO: cache NROFF/NROFF_MANOPT/USE_MANUAL vars?
 if(ENABLE_MANUAL)
   find_program(NROFF NAMES gnroff nroff)
@@ -851,12 +851,12 @@ endforeach(CURL_TEST)
 if(HAVE_FILE_OFFSET_BITS)
   set(_FILE_OFFSET_BITS 64)
 endif(HAVE_FILE_OFFSET_BITS)
-foreach(CURL_TEST
-    HAVE_GLIBC_STRERROR_R
-    HAVE_POSIX_STRERROR_R
-    )
-  curl_internal_test_run(${CURL_TEST})
-endforeach(CURL_TEST)
+#foreach(CURL_TEST
+#    HAVE_GLIBC_STRERROR_R
+#    HAVE_POSIX_STRERROR_R
+#    )
+#  curl_internal_test_run(${CURL_TEST})
+#endforeach(CURL_TEST)
 
 # Check for reentrant
 foreach(CURL_TEST
@@ -985,7 +985,7 @@ endif()
 set(CURL_PULL_STDINT_H ${HAVE_STDINT_H})
 set(CURL_PULL_INTTYPES_H ${HAVE_INTTYPES_H})
 
-include(CMake/OtherTests.cmake)
+#include(CMake/OtherTests.cmake)
 
 add_definitions(-DHAVE_CONFIG_H)
 

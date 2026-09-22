@@ -93,7 +93,7 @@ Curl_addrinfo *Curl_getaddrinfo(struct connectdata *conn,
                                 int port,
                                 int *waitp)
 {
-  return Curl_resolver_getaddrinfo(conn, hostname,port,waitp);
+  return Curl_resolver_getaddrinfo(conn, hostname, port, waitp);
 }
 #endif /* CURLRES_SYNCH */
 #endif /* CURLRES_IPV4 */
