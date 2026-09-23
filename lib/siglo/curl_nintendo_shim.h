@@ -13,7 +13,7 @@ int nnCurlShim_fputs(const char* str, FILE* stream);
 int nnCurlShim_fflush(FILE* stream);
 int nnCurlShim_fputc(int ch, FILE* stream);
 
-int nnCurlShim_fprintf(FILE* stream, char* format, ...);
+int nnCurlShim_fprintf(FILE* stream, const char* format, ...);
 int nnCurlShim_vfprintf(FILE* stream, const char* format, va_list vlist);
 int nnCurlShim_printf(const char* format, ...);
 int nnCurlShim_vprintf(const char* format, va_list vlist);
