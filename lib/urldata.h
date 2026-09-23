@@ -1437,7 +1437,7 @@ struct UserDefined {
   long use_port;     /* which port to use (when not using default) */
   unsigned long httpauth;  /* kind of HTTP authentication to use (bitmask) */
   unsigned long proxyauth; /* kind of proxy authentication to use (bitmask) */
-  char nnOptionA;    /* TODO: NINTENDO STUFF validate name*/
+  bool use_nifm_proxy;     /* Nintendo proxy auth config*/
   char nnOptionB;    /* TODO: NINTENDO STUFF validate name*/
   long followlocation; /* as in HTTP Location: */
   long maxredirs;    /* maximum no. of http(s) redirects to follow, set to -1
