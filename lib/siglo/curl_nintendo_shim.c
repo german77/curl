@@ -94,7 +94,7 @@ int nnCurlShim_fputc(int ch, FILE* stream)
     return ch;
 }
 
-int nnCurlShim_fprintf(FILE* stream, char* format, ...)
+int nnCurlShim_fprintf(FILE* stream, const char* format, ...)
 {
     if (stream != stdout && stream != stderr)
     {

@@ -114,6 +114,7 @@ tcpkeepalive(struct SessionHandle *data,
     infof(data, "Failed to set SO_KEEPALIVE on fd %d\n", sockfd);
   }
   else {
+    return;
 #if defined(SIO_KEEPALIVE_VALS)
     struct tcp_keepalive vals;
     DWORD dummy;
@@ -1029,15 +1030,17 @@ static CURLcode singleipconnect(struct connectdata *conn,
 #else
   is_tcp = (addr.family == AF_INET) && addr.socktype == SOCK_STREAM;
 #endif
-  if(is_tcp && data->set.tcp_nodelay)
-    tcpnodelay(conn, sockfd);
 
-  nosigpipe(conn, sockfd);
+  if(is_tcp) {
+    nosigpipe(conn, sockfd);
 
-  Curl_sndbufset(sockfd);
+    Curl_sndbufset(sockfd);
 
-  if(is_tcp && data->set.tcp_keepalive)
-    tcpkeepalive(data, sockfd);
+    if(data->set.tcp_keepalive)
+      tcpkeepalive(data, sockfd);
+  }
+  else
+    nosigpipe(conn, sockfd);
 
   if(data->set.fsockopt) {
     /* activate callback for setting socket options */
@@ -1168,8 +1171,11 @@ CURLcode Curl_connecthost(struct connectdata *conn,  /* context */
     conn->tempaddr[0] = conn->tempaddr[0]->ai_next;
   }
 
-  if(conn->tempsock[0] == CURL_SOCKET_BAD)
-    return result == 0? CURLE_COULDNT_CONNECT : result;
+  if(conn->tempsock[0] == CURL_SOCKET_BAD) {
+    if(!result)
+      result = CURLE_COULDNT_CONNECT;
+    return result;
+  }
 
   data->info.numconnects++; /* to track the number of connections made */
 
