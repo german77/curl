@@ -3214,9 +3214,7 @@ ConnectionExists(struct SessionHandle *data,
           continue;
       }
 
-#if defined(USE_NTLM)
-      if((!(needle->handler->flags & PROTOPT_CREDSPERREQUEST)) ||
-         (wantNTLMhttp || check->ntlm.state != NTLMSTATE_NONE)) {
+      if((!(needle->handler->flags & PROTOPT_CREDSPERREQUEST))) {
         /* This protocol requires credentials per connection or is HTTP+NTLM,
            so verify that we're using the same name and password as well */
         if(!strequal(needle->user, check->user) ||
@@ -3224,9 +3222,7 @@ ConnectionExists(struct SessionHandle *data,
           /* one of them was different */
           continue;
         }
-        credentialsMatch = TRUE;
       }
-#endif
 
       if(!needle->bits.httpproxy || needle->handler->flags&PROTOPT_SSL ||
          (needle->bits.httpproxy && check->bits.httpproxy &&
