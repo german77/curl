@@ -134,6 +134,7 @@ int curl_win32_idn_to_ascii(const char *in, char **out);
 #include "curl_memory.h"
 /* The last #include file should be: */
 #include "memdebug.h"
+#include "nn/nifm.h"
 
 /* Local static prototypes */
 static struct connectdata *
@@ -537,7 +538,7 @@ CURLcode Curl_init_userdefined(struct UserDefined *set)
   set->proxytype = CURLPROXY_HTTP; /* defaults to HTTP proxy */
   set->httpauth = CURLAUTH_BASIC;  /* defaults to basic */
   set->proxyauth = CURLAUTH_BASIC; /* defaults to basic */
-  set->nnOptionA = 1;
+  set->use_nifm_proxy = TRUE;
 
   /* make libcurl quiet by default: */
   set->hide_progress = TRUE;  /* CURLOPT_NOPROGRESS changes these */
@@ -603,10 +604,10 @@ CURLcode Curl_init_userdefined(struct UserDefined *set)
   set->tcp_keepalive = FALSE;
   set->tcp_keepintvl = 60;
   set->tcp_keepidle = 60;
-  set->expect_100_timeout = 1000L; /* Wait for a second by default. */
 
   set->ssl_enable_npn = TRUE;
   set->ssl_enable_alpn = TRUE;
+  set->expect_100_timeout = 1000L; /* Wait for a second by default. */
   set->sep_headers=TRUE;
 
   return result;
@@ -5435,6 +5436,46 @@ static CURLcode create_conn(struct SessionHandle *data,
   }
 
 #ifndef CURL_DISABLE_PROXY
+
+  /*************************************************************
+   * Nintendo Proxy Configuration
+   *************************************************************/
+  if(data->set.use_nifm_proxy) {
+    struct ProxySetting setting;
+    int res;
+
+    memset(&setting, 0, 0xb4);
+    res = nnnifmGetCurrentProxySetting(&setting);
+
+    if(data->set.str[STRING_PROXY]) {
+      curl_mfprintf(stderr, "Warning: CURLOPT_PROXYAUTOCONFIG is 1 (default), so options set via CURLOPT_PROXY* are ignored.\n");
+      Curl_safefree(data->set.str[STRING_PROXY]);
+    }
+
+    if(!res && setting.enabled) {
+      result = setstropt(&data->set.str[STRING_PROXY], setting.server);
+      if(result)
+        goto out;
+
+      data->set.proxyport = setting.port;
+      conn->bits.proxy = TRUE;
+
+      if(setting.auto_auth_enabled) {
+        result = setstropt(&data->set.str[STRING_PROXYUSERNAME],
+                           setting.user);
+        if(result)
+          goto out;
+
+        result = setstropt(&data->set.str[STRING_PROXYPASSWORD],
+                           setting.password);
+        if(result)
+          goto out;
+
+        conn->bits.proxy_user_passwd = TRUE;
+      }
+    }
+  }
+
   /*************************************************************
    * Extract the user and password from the authentication string
    *************************************************************/
