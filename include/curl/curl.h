@@ -1638,6 +1638,12 @@ typedef enum {
   /* Do not squash dot-dot sequences */
   CINIT(PATH_AS_IS, LONG, 234),
 
+  CINIT(NIFM_PROXY, LONG, 242),
+
+  CINIT(SSL_VERIFYNNOPTION, LONG, 243),
+
+  CINIT(NNOPTIONB, LONG, 248),
+
   CURLOPT_LASTENTRY /* the last unused */
 } CURLoption;
 
