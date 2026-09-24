@@ -1587,6 +1587,7 @@ CURLcode Curl_setopt(struct SessionHandle *data, CURLoption option,
      */
     data->set.low_speed_time=va_arg(param, long);
     break;
+
   case CURLOPT_URL:
     /*
      * The URL to fetch.
@@ -1596,10 +1597,15 @@ CURLcode Curl_setopt(struct SessionHandle *data, CURLoption option,
       Curl_safefree(data->change.url);
       data->change.url_alloc = FALSE;
     }
-    result = setstropt(&data->set.str[STRING_SET_URL],
-                       va_arg(param, char *));
-    data->change.url = data->set.str[STRING_SET_URL];
+
+    if(data->set.nnOptionB) {
+      result = setstropt(&data->set.str[STRING_SET_URL],
+                         va_arg(param, char *));
+      data->change.url = data->set.str[STRING_SET_URL];
+    }
+
     break;
+
   case CURLOPT_PORT:
     /*
      * The port number to use when getting the URL
@@ -2624,6 +2630,19 @@ CURLcode Curl_setopt(struct SessionHandle *data, CURLoption option,
   case CURLOPT_PATH_AS_IS:
     data->set.path_as_is = (0 != va_arg(param, long))?TRUE:FALSE;
     break;
+
+  case CURLOPT_NIFM_PROXY:
+    data->set.use_nifm_proxy = (0 != va_arg(param, long))?TRUE:FALSE;
+    break;
+
+  case CURLOPT_SSL_VERIFYNNOPTION:
+    data->set.ssl.verifynnOption = (0 != va_arg(param, long))?TRUE:FALSE;
+    break;
+
+  case CURLOPT_NNOPTIONB:
+    data->set.nnOptionB = (0 != va_arg(param, long))?TRUE:FALSE;
+    break;
+
   default:
     /* unknown tag and its companion, just ignore: */
     result = CURLE_UNKNOWN_OPTION;

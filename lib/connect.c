@@ -114,7 +114,7 @@ tcpkeepalive(struct SessionHandle *data,
     infof(data, "Failed to set SO_KEEPALIVE on fd %d\n", sockfd);
   }
   else {
-    return;
+    return; // TODO: Everything from here seems to be ignored. Investigate
 #if defined(SIO_KEEPALIVE_VALS)
     struct tcp_keepalive vals;
     DWORD dummy;
@@ -1031,6 +1031,7 @@ static CURLcode singleipconnect(struct connectdata *conn,
   is_tcp = (addr.family == AF_INET) && addr.socktype == SOCK_STREAM;
 #endif
 
+  // TODO: Mismatch here.
   if(is_tcp) {
     nosigpipe(conn, sockfd);
 

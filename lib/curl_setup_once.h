@@ -27,7 +27,9 @@
  * Inclusion of common header files.
  */
 
+#if defined(SWITCH)
 #include <nn/socket.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -255,8 +257,10 @@ struct timeval {
  * Function-like macro definition used to close a socket.
  */
 
-#if defined(HAVE_CLOSESOCKET)
+#if defined(SWITCH)
 #  define sclose(x)  nnsocketClose((x))
+#elif defined(HAVE_CLOSESOCKET)
+#  define sclose(x)  closesocket((x))
 #elif defined(HAVE_CLOSESOCKET_CAMEL)
 #  define sclose(x)  CloseSocket((x))
 #elif defined(HAVE_CLOSE_S)
@@ -272,11 +276,13 @@ struct timeval {
  */
 #if defined(USE_LWIPSOCK)
 #  define sfcntl  lwip_fcntl
-#else
+#elif defined(SWITCH)
 #  define sfcntl  nnsocketFcntl
+#else
+#  define sfcntl  fcntl
 #endif
 
-
+#if defined(SWITCH)
 #define htons(a)  nnsocketInetHtons(a)
 #define ntohs(a)  nnsocketInetNtohs(a)
 
@@ -286,6 +292,8 @@ struct timeval {
 #define send(a,b,c,d)  nnsocketSend(a,b,c,d)
 #define getpeername(a,b,c)  nnsocketGetPeerName(a,b,c)
 #define getsockname(a,b,c)  nnsocketGetSockName(a,b,c)
+#define getsockopt(a,b,c,d,e)  nnsocketGetSockOpt(a,b,c,d,e)
+#endif
 
 /*
  * Uppercase macro versions of ANSI/ISO is*() functions/macros which
@@ -439,31 +447,29 @@ typedef int sig_atomic_t;
  * (or equivalent) on this platform to hide platform details to code using it.
  */
 
-/*#ifdef USE_WINSOCK
+#ifdef USE_WINSOCK
 #define SOCKERRNO         ((int)WSAGetLastError())
 #define SET_SOCKERRNO(x)  (WSASetLastError((int)(x)))
+#elif defined(SWITCH)
+#define SOCKERRNO         (nnsocketGetLastErrno())
+#define SET_SOCKERRNO(x)  (nnsocketSetLastErrno(x))
 #else
 #define SOCKERRNO         (errno)
 #define SET_SOCKERRNO(x)  (errno = (x))
-#endif*/
+#endif
 
-#define SOCKERRNO         (nnsocketGetLastErrno()) // Check this one
-#define SET_SOCKERRNO(x)  (nnsocketSetLastErrno(x))
 
 /*
  * Macro ERRNO / SET_ERRNO() returns / sets the NOT *socket-related* errno
  * (or equivalent) on this platform to hide platform details to code using it.
  */
 
-// TODO: figure out how to implement this properly
-extern int* nn_errno_location(void);
-
 #if defined(WIN32) && !defined(USE_LWIPSOCK)
 #define ERRNO         ((int)GetLastError())
 #define SET_ERRNO(x)  (SetLastError((DWORD)(x)))
 #else
-#define ERRNO         (*nn_errno_location())
-#define SET_ERRNO(x)  (ERRNO = (x))
+#define ERRNO         (errno)
+#define SET_ERRNO(x)  (errno = (x))
 #endif
 
 /*
