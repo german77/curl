@@ -134,7 +134,7 @@ int curl_win32_idn_to_ascii(const char *in, char **out);
 #include "curl_memory.h"
 /* The last #include file should be: */
 #include "memdebug.h"
-#include "nn/nifm.h"
+#include "siglo/curl_nintendo_proxy.h"
 
 /* Local static prototypes */
 static struct connectdata *
@@ -5459,10 +5459,10 @@ static CURLcode create_conn(struct SessionHandle *data,
    * Nintendo Proxy Configuration
    *************************************************************/
   if(data->set.use_nifm_proxy) {
-    struct ProxySetting setting;
+    struct ProxySettings setting;
     int res;
 
-    memset(&setting, 0, 0xb4);
+    memset(&setting, 0, sizeof(struct ProxySettings));
     res = nnnifmGetCurrentProxySetting(&setting);
 
     if(data->set.str[STRING_PROXY]) {
