@@ -20,13 +20,25 @@
 #
 ###########################################################################
 
+LIB_SIGLO_CFILES = ../siglo/curl_nintendo_allocator.c                   \
+  ../siglo/curl_nintendo_middleware_info.cpp                            \
+  ../siglo/curl_nintendo_proxy.cpp ../siglo/curl_nintendo_shim.c        \
+  ../siglo/curl_nintendo_threads.c
+
+LIB_SIGLO_HFILES = ../siglo/curl_nintendo_allocator.h                   \
+  ../siglo/curl_nintendo_middleware_info.h                              \
+  ../siglo/curl_nintendo_proxy.h ../siglo/curl_nintendo_shim.h          \
+  ../siglo/curl_nintendo_threads.h
+
 LIB_VTLS_CFILES = vtls/openssl.c vtls/gtls.c vtls/vtls.c vtls/nss.c     \
   vtls/polarssl.c vtls/polarssl_threadlock.c vtls/axtls.c               \
-  vtls/cyassl.c vtls/schannel.c vtls/darwinssl.c vtls/gskit.c
+  vtls/cyassl.c vtls/schannel.c vtls/darwinssl.c vtls/gskit.c           \
+  vtls/nnssl.c
 
 LIB_VTLS_HFILES = vtls/openssl.h vtls/vtls.h vtls/gtls.h                \
   vtls/nssg.h vtls/polarssl.h vtls/polarssl_threadlock.h vtls/axtls.h   \
-  vtls/cyassl.h vtls/schannel.h vtls/darwinssl.h vtls/gskit.h
+  vtls/cyassl.h vtls/schannel.h vtls/darwinssl.h vtls/gskit.h           \
+  vtls/nnssl.h
 
 LIB_CFILES = file.c timeval.c base64.c hostip.c progress.c formdata.c   \
   cookie.c http.c sendf.c ftp.c url.c dict.c if2ip.c speedcheck.c       \
@@ -69,5 +81,5 @@ LIB_HFILES = arpa_telnet.h netrc.h file.h timeval.h hostip.h progress.h \
 
 LIB_RCFILES = libcurl.rc
 
-CSOURCES = $(LIB_CFILES) $(LIB_VTLS_CFILES)
-HHEADERS = $(LIB_HFILES) $(LIB_VTLS_HFILES)
+CSOURCES = $(LIB_CFILES) $(LIB_SIGLO_CFILES) $(LIB_VTLS_CFILES)
+HHEADERS = $(LIB_HFILES) $(LIB_SIGLO_HFILES) $(LIB_VTLS_HFILES)

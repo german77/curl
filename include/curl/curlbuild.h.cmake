@@ -155,7 +155,7 @@
 /* header file sys/poll.h must be included by the external interface. */
 #cmakedefine CURL_PULL_SYS_POLL_H
 #ifdef CURL_PULL_SYS_POLL_H
-#  include <sys/poll.h>
+#  include <poll.h>
 #endif
 
 /* The size of `long', as computed by sizeof. */

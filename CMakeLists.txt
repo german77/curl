@@ -38,7 +38,7 @@
 # To check:
 # (From Daniel Stenberg) The cmake build selected to run gcc with -fPIC on my box while the plain configure script did not.
 # (From Daniel Stenberg) The gcc command line use neither -g nor any -O options. As a developer, I also treasure our configure scripts's --enable-debug option that sets a long range of "picky" compiler options.
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake;${CMAKE_MODULE_PATH}")
 include(Utilities)
 include(Macros)
@@ -71,9 +71,9 @@ set(OS "\"${CMAKE_SYSTEM_NAME}\"")
 include_directories(${PROJECT_BINARY_DIR}/include/curl)
 include_directories( ${CURL_SOURCE_DIR}/include )
 
-option(BUILD_CURL_EXE "Set to ON to build cURL executable." ON)
-option(BUILD_CURL_TESTS "Set to ON to build cURL tests." ON)
-option(CURL_STATICLIB "Set to ON to build libcurl with static linking." OFF)
+option(BUILD_CURL_EXE "Set to ON to build cURL executable." OFF)
+option(BUILD_CURL_TESTS "Set to ON to build cURL tests." OFF)
+option(CURL_STATICLIB "Set to ON to build libcurl with static linking." ON)
 option(ENABLE_ARES "Set to ON to enable c-ares support" OFF)
 option(ENABLE_THREADED_RESOLVER "Set to ON to enable POSIX threaded DNS lookup" OFF)
 
@@ -184,7 +184,7 @@ option(CURL_DISABLE_VERBOSE_STRINGS "to disable verbose strings" OFF)
 mark_as_advanced(CURL_DISABLE_VERBOSE_STRINGS)
 option(DISABLED_THREADSAFE "Set to explicitly specify we don't want to use thread-safe functions" OFF)
 mark_as_advanced(DISABLED_THREADSAFE)
-option(ENABLE_IPV6 "Define if you want to enable IPv6 support" ON)
+option(ENABLE_IPV6 "Define if you want to enable IPv6 support" OFF)
 mark_as_advanced(ENABLE_IPV6)
 if(ENABLE_IPV6)
   include(CheckStructHasMember)
@@ -200,7 +200,7 @@ if(ENABLE_IPV6)
   endif()
 endif()
 
-option(ENABLE_MANUAL "to provide the built-in manual" ON)
+option(ENABLE_MANUAL "to provide the built-in manual" OFF)
 unset(USE_MANUAL CACHE) # TODO: cache NROFF/NROFF_MANOPT/USE_MANUAL vars?
 if(ENABLE_MANUAL)
   find_program(NROFF NAMES gnroff nroff)
@@ -295,7 +295,7 @@ if(WIN32)
   check_library_exists_concat("winmm"  getch        HAVE_LIBWINMM)
 endif()
 
-option(CMAKE_USE_OPENSSL "Use OpenSSL code. Experimental" ON)
+option(CMAKE_USE_OPENSSL "Use OpenSSL code. Experimental" OFF)
 mark_as_advanced(CMAKE_USE_OPENSSL)
 
 set(USE_OPENSSL OFF)
@@ -851,12 +851,13 @@ endforeach(CURL_TEST)
 if(HAVE_FILE_OFFSET_BITS)
   set(_FILE_OFFSET_BITS 64)
 endif(HAVE_FILE_OFFSET_BITS)
-foreach(CURL_TEST
-    HAVE_GLIBC_STRERROR_R
-    HAVE_POSIX_STRERROR_R
-    )
-  curl_internal_test_run(${CURL_TEST})
-endforeach(CURL_TEST)
+# Skip test and use pre-defined Nintendo config
+# foreach(CURL_TEST
+#    HAVE_GLIBC_STRERROR_R
+#    HAVE_POSIX_STRERROR_R
+#    )
+#   curl_internal_test_run(${CURL_TEST})
+# endforeach(CURL_TEST)
 
 # Check for reentrant
 foreach(CURL_TEST
@@ -985,9 +986,10 @@ endif()
 set(CURL_PULL_STDINT_H ${HAVE_STDINT_H})
 set(CURL_PULL_INTTYPES_H ${HAVE_INTTYPES_H})
 
-include(CMake/OtherTests.cmake)
+# Skip test and use pre-defined Nintendo config
+# include(CMake/OtherTests.cmake)
 
-add_definitions(-DHAVE_CONFIG_H)
+# add_definitions(-DHAVE_CONFIG_H)
 
 # For windows, do not allow the compiler to use default target (Vista).
 if(WIN32)
