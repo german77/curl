@@ -606,7 +606,7 @@ CURLcode Curl_init_userdefined(struct UserDefined *set)
   set->tcp_keepidle = 60;
 
   set->ssl_enable_npn = TRUE;
-  set->ssl_enable_alpn = TRUE
+  set->ssl_enable_alpn = TRUE;
   set->expect_100_timeout = 1000L; /* Wait for a second by default. */
   set->sep_headers = TRUE; /* separated header lists by default */
   return result;
