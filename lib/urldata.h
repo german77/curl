@@ -128,7 +128,7 @@
 #endif /* USE_AXTLS */
 
 #ifdef USE_NNSSL
-#include "nn/ssl.h"
+#include "nnc/ssl.h"
 #endif
 
 #ifdef USE_SCHANNEL
@@ -259,6 +259,18 @@ typedef enum {
   ssl_connection_negotiating,
   ssl_connection_complete
 } ssl_connection_state;
+
+
+#ifdef USE_NNSSL
+struct nnsslBackend  // TODO: Validate members
+{
+    union nnsslConnection connection;
+    union nnsslContext context;
+    union nnsslContext* pnnssl_context; /* active context (embedded or external) */
+    char using_external_ssl_context;
+    int value;
+};
+#endif
 
 /* struct for data related to each SSL connection */
 struct ssl_connect_data {

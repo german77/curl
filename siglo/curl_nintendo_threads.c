@@ -4,9 +4,9 @@
 
 #include "curl_nintendo_allocator.h"
 #include "llist.h"
-#include "nn/diag.h"
-#include "nn/result.h"
-#include "nn/thread.h"
+#include "nnc/diag.h"
+#include "nnc/result.h"
+#include "nnc/thread.h"
 
 GCThread g_garbageCollectorThread;
 

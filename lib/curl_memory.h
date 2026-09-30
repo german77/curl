@@ -105,8 +105,10 @@ extern curl_wcsdup_callback Curl_cwcsdup;
  * from memdebug.h are the ones that shall be used.
  */
 
+#ifdef NNSDK
 #include "siglo/curl_nintendo_allocator.h"
 #include "siglo/curl_nintendo_shim.h"
+#endif
 
 #undef strdup
 #define strdup(ptr) Curl_SigloStrdup(ptr)
@@ -120,6 +122,7 @@ extern curl_wcsdup_callback Curl_cwcsdup;
 #define free(ptr) Curl_SigloFree(ptr)
 
 
+#ifdef NNSDK
 // TODO: Move to correct place
 #define time(timer) nnCurlShim_time(timer)
 #define timeval(timer) nnCurlShim_get_timeval(timer)
@@ -139,6 +142,7 @@ extern curl_wcsdup_callback Curl_cwcsdup;
 #define fileno(stream) nnCurlShim_fileno(stream)
 #define fstat(fd,statbuf) nnCurlShim_fstat(fd,statbuf)
 #define stat(path,statbuf) nnCurlShim_stat(path,statbuf)
+#endif
 
 #ifdef WIN32
 #  ifdef UNICODE

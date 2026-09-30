@@ -2,7 +2,7 @@
 
 #include "curl_nintendo_allocator.h"
 
-#include "nn/diag.h"
+#include "nnc/diag.h"
 
 Allocator gAllocator;
 

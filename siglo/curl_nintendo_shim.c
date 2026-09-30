@@ -3,9 +3,9 @@
 #include "curl_nintendo_shim.h"
 
 #include "curl_nintendo_allocator.h"
-#include "nn/diag.h"
-#include "nn/socket.h"
-#include "nn/time.h"
+#include "nnc/diag.h"
+#include "nnc/socket.h"
+#include "nnc/time.h"
 
 time_t nnCurlShim_time(time_t* timer)
 {

@@ -3,11 +3,11 @@
 
 #include <stdint.h>
 
-#include "nn/thread.h"
+#include "nnc/os.h"
 
 typedef struct SigloThread
 {
-    struct ThreadType nnThread;
+    struct nnosThreadType nnThread;
     int (*threadLoop)(void*);
     void* somethingB;
     void* stack;

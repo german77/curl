@@ -11,7 +11,7 @@
 
 /* The last #include files should be: */
 #include "curl_memory.h"
-#include "nn/ssl.h"
+#include "nnc/ssl.h"
 
 static struct nnResult  NNSSL_RESULT_FATAL = {0x1927b};
 static struct nnResult NNSSL_RESULT_WOULDBLOCK= {0x1987b};

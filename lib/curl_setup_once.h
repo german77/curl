@@ -27,8 +27,8 @@
  * Inclusion of common header files.
  */
 
-#if defined(SWITCH)
-#include <nn/socket.h>
+#ifdef NNSDK
+#include <nnc/socket.h>
 #endif
 
 #include <stdio.h>
