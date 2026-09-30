@@ -79,7 +79,15 @@ if(MSVC AND CURL_STATICLIB)
   set_target_properties(${LIB_NAME} PROPERTIES STATIC_LIBRARY_FLAGS ${CMAKE_EXE_LINKER_FLAGS})
 endif()
 
-target_link_libraries(${LIB_NAME} ${CURL_LIBS})
+target_compile_options(${LIB_NAME} PRIVATE -fno-strict-aliasing)
+
+if(TARGET nnSdk)
+    message(STATUS "NintendoSDK found. Building curl with nnSdk support")
+    target_link_libraries(${LIB_NAME} ${CURL_LIBS} nnSdk)
+else()
+    message(STATUS "Building curl without nnSdk support!")
+    target_link_libraries(${LIB_NAME} ${CURL_LIBS})
+endif()
 
 if(WIN32)
   add_definitions( -D_USRDLL )
