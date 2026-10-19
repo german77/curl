@@ -524,6 +524,11 @@ typedef enum {
   CURLE_SSL_PINNEDPUBKEYNOTMATCH, /* 90 - specified pinned public key did not
                                      match */
   CURLE_SSL_INVALIDCERTSTATUS,   /* 91 - invalid certificate status */
+  CURLE_SSL_CTXFUNCTION,         /* 92 - CTX_FUNCTION is required for https */
+  CURLE_SSL_INVALIDCONTEXT,      /* 93 - context is invalid */
+  CURLE_SSL_FATALERROR,          /* 94 - fatal error in ssl context */
+  CURLE_SSL_ALREADYEXIST,        /* 95 - connection already exist */
+  CURLE_SSL_INVALIDREFERENCE,    /* 96 - invalid pointer reference */
   CURL_LAST /* never use! */
 } CURLcode;
 
@@ -1632,6 +1637,13 @@ typedef enum {
   /* Do not squash dot-dot sequences */
   CINIT(PATH_AS_IS, LONG, 234),
 
+  CINIT(NIFM_PROXY, LONG, 242),
+
+  CINIT(SSL_VERIFYNNOPTION, LONG, 243),
+
+  /* TODO: Find better name */
+  CINIT(NNOPTIONB, LONG, 248),
+
   CURLOPT_LASTENTRY /* the last unused */
 } CURLoption;
 
@@ -2055,7 +2067,8 @@ typedef enum {
   CURLSSLBACKEND_CYASSL = 7,
   CURLSSLBACKEND_SCHANNEL = 8,
   CURLSSLBACKEND_DARWINSSL = 9,
-  CURLSSLBACKEND_AXTLS = 10
+  CURLSSLBACKEND_AXTLS = 10,
+  CURLSSLBACKEND_NNSSL = 11
 } curl_sslbackend;
 
 /* Information about the SSL library used and the respective internal SSL
@@ -2118,6 +2131,7 @@ typedef enum {
   CURLINFO_LOCAL_IP         = CURLINFO_STRING + 41,
   CURLINFO_LOCAL_PORT       = CURLINFO_LONG   + 42,
   CURLINFO_TLS_SESSION      = CURLINFO_SLIST  + 43,
+  CURLINFO_NN_SSL           = CURLINFO_LONG   + 44,
   /* Fill in new entries below here! */
 
   CURLINFO_LASTONE          = 43

@@ -15,10 +15,10 @@
 #define VERSION "7.42.1"
 
 /* ---- SSL/TLS backend ---- */
-// #define USE_NNSSL 1
+#define USE_NNSSL 1
 
 /* ---- threads ---- */
-// #define USE_THREADS_SIGLO
+#define USE_THREADS_SIGLO 1
 
 /* ---- type sizes (aarch64 LP64) ---- */
 #define SIZEOF_INT 4

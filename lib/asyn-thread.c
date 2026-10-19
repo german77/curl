@@ -44,6 +44,8 @@
 #  ifdef HAVE_PROCESS_H
 #    include <process.h>
 #  endif
+#elif defined(USE_THREADS_SIGLO)
+#  include <nnc/os/os_Mutex.h>
 #endif
 
 #if (defined(NETWARE) && defined(__NOVELL_LIBC__))
